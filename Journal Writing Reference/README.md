@@ -9,11 +9,16 @@ recent *Informatics and Health* articles:
 The downloaded publisher PDFs are intentionally excluded from GitHub. Consult
 the journal website or publisher for the original articles.
 
-The requested “Journal of Biotechnical Informatics” title could not be
-verified as an exact journal record. A verification-first guide covering the
-two closest candidates, JFBI and JBBS, is stored at:
+The corrected target journal, **Journal of Biomedical Informatics (JBI)**, has a
+separate verification-first guide at:
+
+- `journal-of-biomedical-informatics-writing/SKILL.md`
+- `journal-of-biomedical-informatics-writing/journal-of-biomedical-informatics-guide.md`
+
+The earlier “Journal of Biotechnical Informatics” wording was ambiguous. A
+legacy verification guide covering the two closest candidates, JFBI and JBBS,
+is retained for reference at:
 
 - `biotechnical-informatics-journal-writing/journal-verification-and-author-guide.md`
 
-Do not reuse either candidate's requirements until the exact journal homepage,
-ISSN and publisher have been confirmed.
+Do not reuse either legacy candidate's requirements for JBI.

@@ -5,10 +5,14 @@ description: Verification-first guidance for a journal requested as “Journal o
 
 # Journal verification first
 
-The exact title “Journal of Biotechnical Informatics” was not verified in the
-checked publisher and journal records. Read
+The earlier requested title “Journal of Biotechnical Informatics” was a naming
+error; the user has now confirmed the Elsevier **Journal of Biomedical
+Informatics (JBI)** website. Read
 `journal-verification-and-author-guide.md` before preparing or reformatting the
 MedVision manuscript. Never merge the requirements of JFBI and JBBS.
+
+For the confirmed JBI target, use the definitive guide in
+`../journal-of-biomedical-informatics-writing/` instead.
 
 Before submission, require the user to confirm the exact journal homepage,
 ISSN and publisher. Then re-check the live author instructions, article type,
