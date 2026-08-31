@@ -9,7 +9,7 @@
 > MIMIC-CXR-derived medical vision–language model reflects incremental image
 > evidence when labels and report inputs share provenance.
 
-![MediVision audit workflow](My%20writing/figures/methodology_audit_workflow_visual_v2.png)
+![MediVision audit workflow](My%20writing/figures/methodology.png)
 
 ## Project status
 

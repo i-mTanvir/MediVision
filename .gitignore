@@ -38,6 +38,7 @@ __pycache__/
 /_final_render*/
 /_final_main_render/
 /_page_counts*/
+/_image_update_render/
 
 # LaTeX build artefacts (source, figures, and final manuscript PDF remain tracked)
 *.aux
