@@ -1,0 +1,17 @@
+% MedVision manuscript -- Conclusion section
+
+\section{Conclusion}\label{sec:conclusion}
+
+On this MIMIC-CXR-derived task, replacing radiographs with a constant
+Gray-Square input preserved nearly the baseline Macro-F1, while the eight-seed
+ICM was near zero and equivalent to the operational null interval. Tested
+fusion and text-debiasing interventions did not establish a larger incremental
+image contribution, and the baseline gate remained near initialization.
+
+The result is a benchmark warning, not proof that radiographs are universally
+unused. CheXpert labels and the model’s \texttt{findings} input share report
+provenance, allowing report-linked shortcuts. Corrected preprocessing and loss
+implementations, matched controls, independent labels, deterministic
+provenance, counterfactual text tests, and external validation are needed before
+broader or clinical claims. ICM is best treated as a diagnostic audit measure,
+not a standalone grounding certificate.

@@ -1,0 +1,7 @@
+Highlights
+
+- Report-preserving image removal left near-ceiling performance intact
+- Image contribution was equivalent to zero within a pre-defined margin
+- Text debiasing did not produce robustly greater image contribution
+- Report-derived labels can make multimodal performance hard to interpret
+- Seed-level controls expose modality-endpoint mismatch risks

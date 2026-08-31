@@ -1,0 +1,21 @@
+cff-version: 1.2.0
+message: "If you use this research artifact, please cite the repository and the final paper when available."
+title: "MediVision: Auditing Modality Inertia in Medical Vision-Language Models"
+type: software
+version: 0.1.0
+date-released: 2026-08-31
+authors:
+  - family-names: "Rahman"
+    given-names: "Nafis Al"
+  - family-names: "Mahmud"
+    given-names: "Tanvir"
+repository-code: "https://github.com/i-mTanvir/MediVision"
+url: "https://github.com/i-mTanvir/MediVision"
+keywords:
+  - medical vision-language models
+  - modality inertia
+  - image contribution metric
+  - label circularity
+  - MIMIC-CXR
+  - shortcut learning
+

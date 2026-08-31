@@ -1,0 +1,50 @@
+{
+  "CLAIM_2024": [
+    {
+      "item": "Study type",
+      "status": "Multimodal VLM audit (negative result framed as audit)"
+    },
+    {
+      "item": "Data source",
+      "status": "PhysioNet MIMIC-CXR (credentialed, subject_id patient-level split)"
+    },
+    {
+      "item": "Outcome",
+      "status": "3-class: Normal / Pneumonia / Pneumothorax"
+    },
+    {
+      "item": "Performance",
+      "status": "Macro-F1, AUROC, ECE, Brier reported"
+    },
+    {
+      "item": "Audit metrics",
+      "status": "ICM (Image Contribution Metric), gate-weight extraction, Gray-Square ablation"
+    }
+  ],
+  "TRIPOD_AI": [
+    {
+      "item": "Title: AI/ML identified",
+      "status": "YES"
+    },
+    {
+      "item": "Data: source + participants",
+      "status": "YES"
+    },
+    {
+      "item": "Model: analysis + hyperparameters",
+      "status": "YES (8 seeds, patient-level split, 5 fusion variants)"
+    },
+    {
+      "item": "Comparisons: statistical tests",
+      "status": "YES (paired Wilcoxon/t/permutation-AUROC, ICM vs zero)"
+    },
+    {
+      "item": "Limitations",
+      "status": "YES (text-circularity, 6000-image cohort, single dataset)"
+    },
+    {
+      "item": "Pre-registration",
+      "status": "YES (ICM as primary outcome, gate collapse as secondary)"
+    }
+  ]
+}

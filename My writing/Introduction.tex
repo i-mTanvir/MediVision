@@ -1,0 +1,68 @@
+% MedVision manuscript -- Introduction section
+
+\section{Introduction}\label{sec:introduction}
+
+Medical vision--language models (VLMs) combine radiographs with the clinical reports
+that accompany them. This pairing is valuable because images encode visual
+structure whereas reports provide findings and context; resources such as
+MIMIC-CXR make both modalities available at scale \citep{johnson2019mimiccxr}.
+High multimodal accuracy, however, does not establish that the model used
+clinically meaningful visual evidence. A model may exploit a report shortcut or
+another predictive feature that is easier to optimise than image information.
+
+This distinction is especially important when targets are report-derived. The
+CheXpert labeler converts report language into uncertainty-aware
+chest-radiograph labels \citep{irvin2019chexpert}. If the same report, or its
+\texttt{findings} field, is also supplied to the model, the target and one
+input modality share an information source. The resulting task may reward
+linguistic recognition of the report-derived label rather than independent
+image-grounded recognition. Report-conditioned prediction can still be useful;
+the problem is claiming incremental image evidence from aggregate accuracy
+alone.
+
+Recent evidence shows why this distinction matters in medical VLM evaluation.
+Performance can change with the amount of clinical context supplied before an
+image is seen, and apparently correct multimodal answers may be accompanied by
+unreliable visual rationales \citep{wang2026clinicalcontext,jin2024hiddenflaws}.
+Large-scale chest-radiography audits have likewise found that removing the
+image can leave performance largely intact, while consistency across prompts
+can coexist with non-visual decision making \citep{lotfinia2026needimage,sadanandan2026consistentdangerous}.
+Counterfactual prototype methods can improve interpretability, but they do not
+replace a report-preserving intervention that directly measures the change in
+the prediction \citep{chiang2026cxrnexus}.
+
+Conventional model comparisons rarely replace the image while holding the
+report, label, architecture, and evaluation protocol fixed. Similarly, a
+non-zero fusion gate or attention map is not necessarily causal evidence of
+visual use: gates can remain near initialization and a one-token interaction
+cannot show word--region alignment. Text-debiasing methods may therefore lower
+a score without creating an independent visual signal when the endpoint itself
+is linked to text.
+
+We present a controlled audit of a three-class MIMIC-CXR-derived task
+(Normal, Pneumonia, and Pneumothorax). The model receives a frontal radiograph
+and the report's \texttt{findings} field. We compare full multimodal models
+with a report-preserving Gray-Square control that replaces every radiograph by
+a constant tensor, together with text-only and image-only controls. Four
+fusion or text-debiasing variants are evaluated alongside the project's
+baseline gated dual-path model (CADQ). We
+report discrimination, calibration, class-specific behaviour, learned image
+gates, and qualitative gradient-weighted class activation mapping (Grad-CAM)
+checks. The primary diagnostic is the Image
+Contribution Metric (ICM), defined as the relative Macro-F1 difference between
+the full model and the Gray-Square reference; paired inference is performed at
+the trained-seed level because held-out studies recur across seeds.
+
+The audit asks whether removing image information changes performance, whether
+the interventions increase incremental image contribution, whether checkpoint
+gates show learned reliance or stagnation, and whether calibration and
+class-specific results qualify the headline metrics. It contributes a
+report-preserving image ablation, seed-level uncertainty and calibration
+reporting, and an explicit analysis of label provenance and control asymmetry.
+The study is a diagnostic evaluation, not a new clinical predictor or a claim
+that radiographs are generally unnecessary. Its interpretation is limited to
+this report-linked cohort, preprocessing path, and checkpoint archive; broader
+claims require corrected implementations, independent labels, matched controls,
+and external validation. Reporting follows the transparency principles of the
+Checklist for Artificial Intelligence in Medical Imaging (CLAIM) and the
+TRIPOD+AI framework \citep{mongan2024claim,collins2024tripodai}.

@@ -1,0 +1,54 @@
+% MedVision manuscript -- Related Work section
+
+\section{Related Work}\label{sec:related-work}
+
+\subsection{Medical image--text learning and report-derived targets}
+Paired image--report resources support contrastive and local alignment methods
+such as ConVIRT and GLoRIA, while clinical-domain language models improve the
+handling of negation and uncertainty \citep{zhang2022convirt,huang2021gloria,boecking2022textsemantics}.
+These methods establish the value of reports but do not show that a downstream
+prediction depends on the image. MIMIC-CXR links radiographs to free-text
+reports, whereas CheXpert derives uncertainty-aware labels from report language
+\citep{johnson2019mimiccxr,irvin2019chexpert}. Report-labeling tools can also
+propagate errors and subgroup differences \citep{sabottke2024targetselection,santomartino2024nlplabeling}.
+The present audit therefore distinguishes report-conditioned prediction from
+independent image-grounded diagnosis when both target and text input share a
+report source.
+
+\subsection{Shortcut learning and unimodal bias}
+Shortcut-learning research shows that high in-distribution accuracy can arise from
+predictive but unintended features \citep{geirhos2020shortcut}. In radiology,
+acquisition devices, population structure, annotation practice, and clinical
+context can create such shortcuts \citep{gichoya2023shortcuts}. In visual
+question answering, VQA-CP, GVQA, product-of-experts methods, and RUBi reduce
+answer or language priors by encouraging visual evidence \citep{agrawal2018dontassume,clark2019easyway,cadene2019rubi}.
+They motivate LMH-style debiasing, but do not resolve the harder case in which
+the benchmark label is itself text-derived.
+
+\subsection{Auditing modality reliance}
+Recent multimodal evaluations separate correctness from evidence dependence:
+correct answers can be accompanied by flawed visual rationales, and stable
+predictions need not be image-reliant \citep{jin2024hiddenflaws,sadanandan2026consistentdangerous}.
+Chest-X-ray studies further report heterogeneity after controlling for clinical
+context \citep{wang2026clinicalcontext}. Causal audits using image occlusion,
+cross-patient replacement, and text-only comparisons provide a direct precedent
+for testing image use \citep{lotfinia2026needimage}. Prototype and counterfactual
+methods can improve saliency, but heatmaps alone cannot establish that image
+removal changes a decision \citep{chiang2026cxrnexus}.
+
+\subsection{Fusion gates and explanation limits}
+Gated multimodal units learn modality weights, yet a non-zero or balanced gate
+is not causal attribution \citep{arevalo2017gmu}. A gate may remain near its
+initialization when the objective does not identify a different value. Likewise,
+reasoning traces or plausible radiologist-style explanations are useful
+interfaces but not grounding tests \citep{myronenko2025reasoningcxr}. The
+present study combines checkpoint gate extraction with a report-preserving
+image intervention and treats Grad-CAM as a qualitative sanity check.
+
+\subsection{Positioning of the present study}
+Prior work treats image--text learning, report-label uncertainty, shortcut bias,
+and behavioural audits separately. We examine their intersection using
+report-preserving, text-only, and image-only controls, an operational ICM,
+checkpoint gates, and seed-level inference. The study tests incremental visual
+evidence without claiming that report-conditioned prediction or all medical
+VLMs are invalid.

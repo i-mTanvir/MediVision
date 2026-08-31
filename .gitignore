@@ -1,0 +1,89 @@
+# Operating-system and editor files
+.DS_Store
+Thumbs.db
+Desktop.ini
+.idea/
+.vscode/
+*.swp
+*.tmp
+
+# Credentials and local configuration
+.env
+.env.*
+!.env.example
+*credentials*
+*secrets*
+
+# Python and notebook caches
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ipynb_checkpoints/
+
+# Local extraction, rendering, and scratch work
+/_tmp_ref_extract/
+/_v9_media/
+/_v9_render/
+/tmp/
+/$build/
+/tmp_cell_*.txt
+/_walkthrough_text.txt
+/markdown_exports/
+/latex_dependencies/
+/New Added/untitled folder/medvision_final/
+/New Added/untitled folder/__huggingface_repos__.json
+/New Added/untitled folder/*.png
+
+# LaTeX build artefacts (source, figures, and final manuscript PDF remain tracked)
+*.aux
+*.abs
+*.bbl
+*.blg
+*.fdb_latexmk
+*.fls
+*.log
+*.lof
+*.lot
+*.out
+*.synctex.gz
+*.toc
+/My writing/_*/
+/My writing/_*.txt
+/My writing/*_preview.*
+/My writing/*_preview_*.txt
+/My writing/_revised_v10_contact*.png
+/My writing/Overleaf_upload/
+/My writing/Overleaf_ready/
+/My writing/Overleaf_single_main/
+/My writing/MedVision_Q1_Master.txt
+/My writing/MedVision_Q1_Paper_REVISED_v10.docx
+/My writing/MedVision_Q1_Paper_REVISED_v10.pdf
+/My writing/figures/*_preview.png
+/My writing/figures/icm_tost_clean.png
+/My writing/figures/methodology_audit_workflow.png
+/My writing/figures/methodology_audit_workflow.pdf
+/My writing/figures/methodology_audit_workflow_caption.txt
+
+# Superseded root-level drafts and helper copies
+/Highlights.txt
+/INFORMATICs_HEALTH_LATEX_README.md
+/informatics_health_template.tex
+/references.bib
+/MedVision_Q1_Paper_FINAL_v9.docx
+/update_v9_docx.py
+/ai_peer_reviewer_bot_working_notes.md
+/ai_q1_paper_architect_working_notes.md
+/experimental_blueprint_working_notes.md
+
+# Third-party papers are intentionally not redistributed.
+/Referances/*.pdf
+/Journal Writing Reference/*.pdf
+
+# Model checkpoints and raw datasets must remain outside version control.
+*.ckpt
+*.pt
+*.pth
+*.safetensors
+*.dicom
+*.dcm

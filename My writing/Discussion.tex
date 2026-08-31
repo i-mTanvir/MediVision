@@ -1,0 +1,98 @@
+% MedVision manuscript -- Discussion section
+
+\section{Discussion}\label{sec:discussion}
+
+\subsection{Principal findings}\label{sec:discussion-principal}
+The central result was a mismatch between high predictive performance and
+incremental image evidence. Gray-Square retained Macro-F1 0.9381 versus the
+baseline eight-seed mean of $0.9397\pm0.0061$; baseline ICM was
+$0.0016\pm0.0065$, with a non-significant signed test and TOST equivalence to
+the operational interval $[-0.01,0.01]$. Thus, replacing the radiograph changed
+little under this intervention. It does not imply that radiographs are
+universally unused.
+
+The tested interventions did not provide a consistent remedy. LMH had the
+highest Macro-F1 but lower AUROC and substantially worse ECE and Brier score;
+Noise-Consistency also increased Brier score without increasing ICM.
+Adaptive-CADQ remained near baseline, and the small GACR-B increase was
+exploratory because it was added after the initial plan. Extracted image gates
+(0.42624, 0.49963, and 0.57336 by class) stayed near initialization rather than
+collapsing. This is a stagnation/null observation, not proof that the image
+branch was disconnected.
+
+We refer to this pattern as modality inertia, or gate stagnation: the gate
+neither collapses nor learns because the report pathway already supplies a
+strong label-correlated signal, leaving insufficient gradient incentive for
+image reliance.
+
+\subsection{Label--report circularity and endpoint validity}
+MIMIC-CXR radiographs are paired with reports, CheXpert labels are generated
+from report language, and the model receives the report’s \texttt{findings}
+field \citep{johnson2019mimiccxr,irvin2019chexpert}. The task therefore does not
+isolate image-based disease recognition. Text-only Macro-F1/AUROC were 0.8555/
+0.9820, while Gray-Square reached 0.9381/0.9960. A constant image consequently
+preserved most of the multimodal score, consistent with report-linked shortcut
+potential. The control does not identify the phrases used or show that labels
+are clinically wrong; it identifies a construct-validity risk in which the
+target and input share an information source.
+
+This linkage explains why text-debiasing can appear incoherent. Suppressing a
+report shortcut may remove information rewarded by a report-derived label
+without creating an independent visual signal, yielding lower discrimination or
+calibration with no ICM gain. The null result should therefore not be attributed
+solely to a failed fusion module.
+
+The GACR-B result is especially informative. Even the grounding-aware
+consistency intervention proposed by Sadanandan and Behzadan
+\citep{sadanandan2026consistentdangerous} could not overcome the circularity:
+with $\lambda=0.3$, its consistency penalty did not generate enough gradient to
+counter the dominant report shortcut. This is a limitation of the label--input
+relationship, not a claim that the proposed intervention is ineffective under
+independent labels.
+
+\subsection{Architectural and statistical interpretation}
+The attention block contains one projected image token and one projected text
+token. Its single-key attention cannot express word--region alignment, so its
+weights and Grad-CAM examples are not causal grounding evidence. High Macro-F1,
+near-zero ICM, and a non-collapsed gate can coexist when the image is redundant
+with text or receives little optimisation incentive. The archived negative-KL
+Noise-Consistency objective additionally rewards prediction divergence when
+minimised; a conventional consistency claim requires a positive-KL rerun.
+
+The Gray-Square control was a single retained run reused for eight ICM values,
+and image-only checkpoint restoration was inconsistent. These asymmetries make
+the controls useful diagnostics but understate control uncertainty and prevent
+modality ranking. Confirmatory work should train matched controls at every seed
+and propagate their variation. Seed-level pairing is appropriate because the
+same 455 studies recur; pooled subject results are descriptive only.
+
+\subsection{Implications for evaluation and future study design}
+Modality contribution should be audited directly rather than inferred from a
+high multimodal score. Future studies should combine report-preserving image
+ablation with independent or image-derived labels, masked or temporally
+separated report fields, counterfactual text tests, deterministic source
+provenance, and external cohorts. ICM should be validated under these settings,
+not treated as a standalone grounding certificate. Reporting controls, label
+provenance, checkpoint rules, calibration, and seed-level uncertainty together
+is consistent with CLAIM and TRIPOD+AI transparency principles
+\citep{mongan2024claim,collins2024tripodai}.
+
+For regulatory-facing evaluation, ICM and gate-stagnation checks should be
+treated as evidence-traceability tests rather than optional visualisations. A
+high aggregate score does not establish that the declared image input affected
+the decision, particularly when labels and reports share provenance. FDA good
+machine-learning-practice principles and its real-world-evidence guidance
+emphasise traceable data provenance, representative evaluation, uncertainty, and
+evidence that supports the intended use \citep{fda2025gmlp,fda2025rwe}. In that
+spirit, a submission for a multimodal medical device should report the
+report-preserving ablation, matched seed-level uncertainty, calibration, gate
+behaviour, and independent-label validation before making a visual-grounding
+claim.
+
+The findings are not a clinical recommendation to ignore radiographs. They are
+limited to one report-linked cohort, task, preprocessing path, and checkpoint
+archive, with known normalisation, loss-sign, small-minority, post-hoc, and
+single-control limitations. The defensible conclusion is that these
+interventions did not establish robust incremental image evidence in this
+benchmark; corrected implementations, independent labels, matched controls,
+and external validation are needed before broader claims.

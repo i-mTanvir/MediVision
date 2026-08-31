@@ -1,0 +1,422 @@
+{
+  "CLAIM_2024": [
+    {
+      "id": "1",
+      "item": "Study design \u2014 prospective vs retrospective",
+      "status": "PARTIAL",
+      "evidence": "Retrospective, MIMIC-CXR v2.1.0 (Part 1, cell 4, line ~340)."
+    },
+    {
+      "id": "2",
+      "item": "Data source \u2014 institution, period",
+      "status": "YES",
+      "evidence": "MIMIC-CXR, Beth Israel Deaconess, 2011-2016 (Part 1, cell 1, line ~25)."
+    },
+    {
+      "id": "3",
+      "item": "Patient demographics reported",
+      "status": "PARTIAL",
+      "evidence": "Subject_id present; age/sex/race not stratified \u2014 TODO Table 1."
+    },
+    {
+      "id": "4",
+      "item": "Inclusion / exclusion criteria explicit",
+      "status": "YES",
+      "evidence": "Part 1 cell 4: studies with all 14 CheXpert labels non-ambiguous; PA/AP only."
+    },
+    {
+      "id": "5",
+      "item": "Sample size justification / power",
+      "status": "NO",
+      "evidence": "No a-priori power analysis. Test n=1500, PNX=47."
+    },
+    {
+      "id": "6",
+      "item": "Reference standard definition",
+      "status": "YES",
+      "evidence": "CheXpert labeler majority vote; Part 1 cell 4 lines 397-403 (3-class mapping)."
+    },
+    {
+      "id": "7",
+      "item": "Reference standard independence",
+      "status": "PARTIAL",
+      "evidence": "CheXpert labeler derives labels from same text fed to model \u2014 circularity disclosed."
+    },
+    {
+      "id": "8",
+      "item": "Data partitioning described",
+      "status": "YES",
+      "evidence": "Part 1 cell 4: GroupShuffleSplit 70/15/15 patient-level, random_state=42."
+    },
+    {
+      "id": "9",
+      "item": "No data leakage",
+      "status": "YES",
+      "evidence": "groups=subject_id; 36 cross-split duplicates removed (Part 1 cell 4 output line 494)."
+    },
+    {
+      "id": "10",
+      "item": "Pre-training dataset disclosure",
+      "status": "PARTIAL",
+      "evidence": "Image: torchxrayvision DenseNet121 pretrained on MIMIC-CXR (overlap risk, B3). Text: bert-base-uncased (no overlap)."
+    },
+    {
+      "id": "11",
+      "item": "External validation",
+      "status": "NO",
+      "evidence": "Single-center, single-dataset. BLOCKER for Q1."
+    },
+    {
+      "id": "12",
+      "item": "Model architecture description",
+      "status": "YES",
+      "evidence": "Part 1 cell 5 Config + audit-final cell 6 model classes."
+    },
+    {
+      "id": "13",
+      "item": "Loss function and optimisation",
+      "status": "YES",
+      "evidence": "CE + focal (gamma=1.5) + label smoothing 0.05 + LMH entropy + noise-consistency. AdamW."
+    },
+    {
+      "id": "14",
+      "item": "Hyperparameter search strategy",
+      "status": "NO",
+      "evidence": "All 28 hyperparameters hand-picked; no grid/random search (defect C4)."
+    },
+    {
+      "id": "15",
+      "item": "Training infrastructure",
+      "status": "YES",
+      "evidence": "Kaggle T4 x2 GPU; PyTorch; mixed-precision; grad-accum=4; eff bs=32."
+    },
+    {
+      "id": "16",
+      "item": "Pre-registered statistical analysis plan",
+      "status": "PARTIAL",
+      "evidence": "Pre-reg in audit-final cell 9 line 1191; POST-HOC because Part 11 only trained 3 adaptive_cadq seeds (defect F7) \u2014 must disclose in Limitations."
+    },
+    {
+      "id": "17",
+      "item": "Primary outcome definition",
+      "status": "YES",
+      "evidence": "ICM = (VLM F1 - Gray-Square F1) / VLM F1. Audit-final MD cell 0 line 11."
+    },
+    {
+      "id": "18",
+      "item": "Comparison / null hypothesis",
+      "status": "PARTIAL",
+      "evidence": "H0: ICM=0 (one-sample Wilcoxon). Variant-vs-baseline H0 added by this FIX patch."
+    },
+    {
+      "id": "19",
+      "item": "Statistical tests used",
+      "status": "YES",
+      "evidence": "Wilcoxon, t-test (with Shapiro precheck), DeLong, McNemar, permutation AUC, bootstrap CI, TOST, Wilson CI \u2014 ALL wired up by this FIX patch."
+    },
+    {
+      "id": "20",
+      "item": "Multiple-comparison correction",
+      "status": "YES",
+      "evidence": "Benjamini-Hochberg FDR applied (defect A12 \u2014 fixed by this patch)."
+    },
+    {
+      "id": "21",
+      "item": "Effect sizes reported",
+      "status": "YES",
+      "evidence": "Cohen's d for all variant-vs-baseline pairs (defect A7 \u2014 fixed by this patch)."
+    },
+    {
+      "id": "22",
+      "item": "Calibration metrics reported",
+      "status": "YES",
+      "evidence": "ECE + Brier + reliability diagram (defect E13 \u2014 fixed by this patch)."
+    },
+    {
+      "id": "23",
+      "item": "Failure mode analysis",
+      "status": "PARTIAL",
+      "evidence": "Normalised CMs per variant (defects E4/E5 \u2014 fixed); no per-subgroup analysis."
+    },
+    {
+      "id": "24",
+      "item": "Limitations section",
+      "status": "PARTIAL",
+      "evidence": "Needs prose on: pretraining overlap, single-center, CheXpert label circularity, post-hoc pre-reg."
+    },
+    {
+      "id": "25",
+      "item": "Code / data availability",
+      "status": "PARTIAL",
+      "evidence": "Kaggle notebooks public; requirements.txt + environment.yml + config.py NOW generated by this patch (Phase 4 of the fix script)."
+    },
+    {
+      "id": "26",
+      "item": "Reproducibility \u2014 seeds, deterministic algos",
+      "status": "PARTIAL",
+      "evidence": "Seeds [42,123,456,789,1010,1111,1212,1313] (hand-picked, defect D3); torch.use_deterministic_algorithms + worker_init_fn helper generated by fix script Phase 4."
+    },
+    {
+      "id": "27",
+      "item": "Clinical impact statement",
+      "status": "NO",
+      "evidence": "No discussion of clinical deployment pathway, FDA/CE regulatory pathway, or potential harm."
+    }
+  ],
+  "TRIPOD_AI": [
+    {
+      "id": "1",
+      "item": "Title indicates AI/ML",
+      "status": "NO",
+      "evidence": "Manuscript title needs 'AI' or 'machine learning'."
+    },
+    {
+      "id": "2",
+      "item": "Structured abstract",
+      "status": "PARTIAL",
+      "evidence": "Abstract present; needs strict BMJ-structured format."
+    },
+    {
+      "id": "3",
+      "item": "Background / rationale",
+      "status": "YES",
+      "evidence": "Audit-final MD cell 0 + Part 1 cell 1."
+    },
+    {
+      "id": "4",
+      "item": "Objectives",
+      "status": "YES",
+      "evidence": "Audit-final MD cell 0 line 11 (ICM + Wilcoxon vs zero)."
+    },
+    {
+      "id": "5",
+      "item": "Study design",
+      "status": "YES",
+      "evidence": "Retrospective cross-sectional, single-center."
+    },
+    {
+      "id": "6",
+      "item": "Setting",
+      "status": "PARTIAL",
+      "evidence": "MIMIC-CXR BIDMC 2011-2016 ED; needs explicit prose."
+    },
+    {
+      "id": "7",
+      "item": "Participants",
+      "status": "PARTIAL",
+      "evidence": "Cohort n~5000 studies; needs CONSORT-style flow."
+    },
+    {
+      "id": "8",
+      "item": "Eligibility criteria",
+      "status": "YES",
+      "evidence": "Part 1 cell 4 line ~395."
+    },
+    {
+      "id": "9",
+      "item": "Outcome definition",
+      "status": "YES",
+      "evidence": "3-class via CheXpert labels."
+    },
+    {
+      "id": "10",
+      "item": "Predictors",
+      "status": "PARTIAL",
+      "evidence": "Image + text; no n-gram analysis of text features."
+    },
+    {
+      "id": "11",
+      "item": "Sample size",
+      "status": "NO",
+      "evidence": "No power calculation (CLAIM 5)."
+    },
+    {
+      "id": "12",
+      "item": "Statistical analysis methods",
+      "status": "YES",
+      "evidence": "Wilcoxon + bootstrap + TOST + DeLong + McNemar + Wilson + BH FDR (all fixed by this patch)."
+    },
+    {
+      "id": "13",
+      "item": "Missing data",
+      "status": "NO",
+      "evidence": "Drop-NA in Part 1 cell 4; no sensitivity analysis."
+    },
+    {
+      "id": "14",
+      "item": "Development vs validation",
+      "status": "PARTIAL",
+      "evidence": "Train/val/test explicit; no external validation (CLAIM 11)."
+    },
+    {
+      "id": "15",
+      "item": "Feature selection",
+      "status": "PARTIAL",
+      "evidence": "All features used; CADQ entropy gate is the only 'selection' equivalent."
+    },
+    {
+      "id": "16",
+      "item": "Algorithm",
+      "status": "YES",
+      "evidence": "PyTorch + transformers + torchxrayvision; 4 fusion variants."
+    },
+    {
+      "id": "17",
+      "item": "Hyperparameter tuning",
+      "status": "NO",
+      "evidence": "No tuning (defect C4)."
+    },
+    {
+      "id": "18",
+      "item": "Performance metric",
+      "status": "YES",
+      "evidence": "Macro-F1, AUC, ECE, Brier."
+    },
+    {
+      "id": "19",
+      "item": "Internal validation",
+      "status": "PARTIAL",
+      "evidence": "Single test split; no K-fold CV (defect D5)."
+    },
+    {
+      "id": "20",
+      "item": "External validation",
+      "status": "NO",
+      "evidence": "No external dataset. BLOCKER."
+    },
+    {
+      "id": "21",
+      "item": "Calibration",
+      "status": "YES",
+      "evidence": "ECE + Brier + reliability diagram (fixed by this patch)."
+    },
+    {
+      "id": "22",
+      "item": "Decision-curve / net benefit",
+      "status": "NO",
+      "evidence": "Not performed."
+    },
+    {
+      "id": "23",
+      "item": "Subgroup / heterogeneity",
+      "status": "NO",
+      "evidence": "No analysis by sex / age / view / device."
+    },
+    {
+      "id": "24",
+      "item": "Model interpretation",
+      "status": "PARTIAL",
+      "evidence": "Grad-CAM; XRVNormalize bug flagged (E16)."
+    },
+    {
+      "id": "25",
+      "item": "Bias / fairness audit",
+      "status": "PARTIAL",
+      "evidence": "TF-IDF LR bias model (OOF acc 0.9195); needs test-set acc (D11)."
+    },
+    {
+      "id": "26",
+      "item": "Adversarial / robustness",
+      "status": "PARTIAL",
+      "evidence": "Noise-Consistency variant; only one noise std."
+    },
+    {
+      "id": "27",
+      "item": "Failure case analysis",
+      "status": "PARTIAL",
+      "evidence": "Normalised CMs (fixed); no qualitative review."
+    },
+    {
+      "id": "28",
+      "item": "Discussion \u2014 key findings",
+      "status": "PARTIAL",
+      "evidence": "Manuscript present; needs honest framing of gate STAGNATION (F1)."
+    },
+    {
+      "id": "29",
+      "item": "Discussion \u2014 limitations",
+      "status": "PARTIAL",
+      "evidence": "Needs prose on pretraining overlap, post-hoc pre-reg, single-center, no external SOTA."
+    },
+    {
+      "id": "30",
+      "item": "Implications for practice",
+      "status": "NO",
+      "evidence": "Not addressed."
+    },
+    {
+      "id": "31",
+      "item": "Implications for research",
+      "status": "PARTIAL",
+      "evidence": "Audit-final cell 10 NEXT STEPS list; needs consolidation."
+    },
+    {
+      "id": "32",
+      "item": "Funding source",
+      "status": "NO",
+      "evidence": "Not declared."
+    },
+    {
+      "id": "33",
+      "item": "Data access statement",
+      "status": "PARTIAL",
+      "evidence": "MIMIC-CXR requires PhysioNet credentialing (Part 1 cell 4)."
+    },
+    {
+      "id": "34",
+      "item": "Code availability",
+      "status": "PARTIAL",
+      "evidence": "Kaggle notebooks; requirements.txt + config.py NOW generated."
+    },
+    {
+      "id": "35",
+      "item": "Author contributions",
+      "status": "NO",
+      "evidence": "Not in notebooks."
+    },
+    {
+      "id": "36",
+      "item": "Conflicts of interest",
+      "status": "NO",
+      "evidence": "Not in notebooks."
+    },
+    {
+      "id": "37",
+      "item": "Patient / public involvement",
+      "status": "NO",
+      "evidence": "Not in notebooks."
+    },
+    {
+      "id": "38",
+      "item": "Ethics approval",
+      "status": "PARTIAL",
+      "evidence": "MIMIC-CXR IRB documented in source dataset paper."
+    },
+    {
+      "id": "39",
+      "item": "Protocol registration",
+      "status": "NO",
+      "evidence": "Not on OSF/ClinicalTrials.gov."
+    },
+    {
+      "id": "40",
+      "item": "Data sharing",
+      "status": "PARTIAL",
+      "evidence": "Derived dataset shareable on request; raw via PhysioNet credentialed access."
+    },
+    {
+      "id": "41",
+      "item": "Dissemination plan",
+      "status": "NO",
+      "evidence": "Not addressed."
+    }
+  ],
+  "summary": {
+    "CLAIM_YES": 13,
+    "CLAIM_PARTIAL": 10,
+    "CLAIM_NO": 4,
+    "TRIPOD_YES": 9,
+    "TRIPOD_PARTIAL": 18,
+    "TRIPOD_NO": 14
+  }
+}

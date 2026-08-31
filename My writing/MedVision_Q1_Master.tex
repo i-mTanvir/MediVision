@@ -1,0 +1,95 @@
+% MedVision Q1 manuscript master file for Informatics and Health.
+
+\documentclass[a4paper,fleqn]{cas-sc}
+
+\usepackage{amsmath,amssymb}
+\usepackage{booktabs}
+\usepackage{float}
+\usepackage{graphicx}
+\usepackage{multirow}
+\usepackage{natbib}
+\usepackage{xcolor}
+\usepackage{hyperref}
+\hypersetup{hypertexnames=false,hidelinks}
+
+\graphicspath{{figures/}}
+
+% Use a clean manuscript page style: suppress the CAS template's default
+% running title and the "Preprint submitted to Elsevier" footer while
+% retaining unobtrusive page numbering.
+\ExplSyntaxOn
+\cs_set:Npn \__first_footerline: {}
+\cs_set:Npn \__first_head: {}
+\cs_set:Npn \__cas_head: {}
+\ExplSyntaxOff
+% No ORCID identifiers were supplied; suppress the template's empty ORCID footnote.
+\RenewDocumentCommand \printorcid { } { }
+\pagestyle{cas}
+
+\begin{document}
+
+\title[mode=title]{Quantifying Modality Inertia in Medical Vision-Language Models: Image Contribution Metric, Gate Stagnation, and the Failure of Debiasing Under Label Circularity}
+
+\author{Nafis Al Rahman}
+\author{Tanvir Mahmud}
+
+\begin{abstract}
+Background. Medical vision--language models can report high accuracy while
+relying on report text rather than radiographic evidence. This risk is
+especially difficult to interpret in MIMIC-CXR, where CheXpert targets are
+generated from the same reports that may remain available as model inputs. We
+evaluated whether text-debiasing increases incremental image information or
+merely changes aggregate performance.
+
+Methods. We audited a three-class MIMIC-CXR-derived classifier comprising
+Normal, Pneumonia, and Pneumothorax across eight random seeds and five
+conditions: baseline gated fusion, a learned text-prior product-of-experts
+variant, a noise-sensitivity variant, an exploratory grounding-aware variant,
+and an adaptive-gate variant. Each condition used 455 held-out studies;
+report-preserving Gray-Square replacement, text-only, and image-only controls
+were retained. The primary endpoint was the Image Contribution Metric (ICM),
+with a pre-specified equivalence interval of minus 0.01 to plus 0.01. We
+combined paired seed-level inference with calibration, gate extraction, and
+qualitative saliency checks.
+
+Findings. Baseline Macro-F1 was 0.9397 plus or minus 0.0061, compared with
+0.9381 for the retained Gray-Square control. Baseline ICM was 0.0016 plus or
+minus 0.0065; the signed-rank test was non-significant (p = 0.4219), while two
+one-sided tests supported equivalence to zero within the operational interval
+(p = 0.0040). No text-debiasing condition demonstrated a robust increase in
+ICM. The text-prior variant increased expected calibration error from 0.0237
+to 0.0621 and Brier score from 0.0522 to 0.0685. Extracted baseline gates
+remained near initialization, with an overall mean of 0.49975.
+
+Interpretation. On this report-linked benchmark, near-ceiling performance was
+compatible with a report shortcut and did not establish incremental image
+grounding. The result is a diagnostic warning about label--report circularity
+and endpoint design, not evidence that radiographs are universally unnecessary.
+Independent labels, corrected implementations, matched controls, provenance
+manifests, and external cohorts are required before making broader clinical
+claims.
+\end{abstract}
+
+\begin{keywords}
+medical vision--language model \sep modality inertia \sep gate stagnation
+\sep Image Contribution Metric \sep label circularity \sep MIMIC-CXR
+\end{keywords}
+
+\begingroup
+\sloppy
+\maketitle
+\endgroup
+
+\input{Introduction.tex}
+\input{Related_Work.tex}
+\input{Methodology.tex}
+\input{Results.tex}
+\input{Discussion.tex}
+\input{Limitations.tex}
+\input{Conclusion.tex}
+\input{Reporting_Statements.tex}
+
+\bibliographystyle{cas-model2-names}
+\bibliography{related_work_references,methodology_references}
+
+\end{document}

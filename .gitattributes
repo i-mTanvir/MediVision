@@ -1,0 +1,11 @@
+*.ipynb linguist-language=Python
+*.bib linguist-language=BibTeX
+*.tex linguist-language=TeX
+*.pdf binary
+*.docx binary
+*.pkl binary
+*.pickle binary
+*.png binary
+*.jpg binary
+*.jpeg binary
+

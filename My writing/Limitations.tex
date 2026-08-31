@@ -1,0 +1,42 @@
+% MedVision manuscript -- Limitations section
+
+\section{Limitations}\label{sec:limitations}
+
+\subsection{Construct validity and cohort scope}
+The principal limitation is label provenance. CheXpert targets and the model’s
+\texttt{findings} input both derive from the MIMIC-CXR reports
+\citep{johnson2019mimiccxr,irvin2019chexpert}; the controls expose this overlap
+but cannot identify the phrases used or establish label error. Independent
+image-derived adjudication, report masking, or a temporally separated target is
+needed to claim visual diagnosis. The study also covers only three classes,
+2,953 usable studies, and 47 test Pneumothorax cases. Class caps, uncertain-label
+handling, prevalence, and patient-level split choices limit extrapolation.
+
+\subsection{Implementation and architecture}
+The archived image mapping to $[-1,1]$ may not match the native
+TorchXRayVision preprocessing expected by the selected weights
+\citep{cohen2022torchxrayvision}. The negative-KL Noise-Consistency loss rewards
+divergence in a minimised objective, so it cannot support a conventional
+consistency claim until rerun with positive KL. One image token and one text
+token make the eight-head attention feature-level rather than word--region
+alignment; gates and Grad-CAM are therefore diagnostic, not causal.
+
+\subsection{Controls and uncertainty}
+Gray-Square was one retained run reused for eight ICM values, while image-only
+checkpoint restoration was inconsistent. Controls are consequently diagnostic,
+not modality rankings, and a matched multi-seed design is required. Seed-level
+inference leaves only $n=8$ replications; the operational TOST interval
+$[-0.01,0.01]$ is a project-defined margin, not a clinical or regulatory
+threshold \citep{lakens2017equivalence}.
+
+\subsection{Provenance and generalisability}
+The fixed archive retained first-seen duplicate merge values without a preserved
+source-priority rule or hash manifest. Adaptive-CADQ’s eight-seed extension and
+GACR-B were post hoc, and probability arrays had to be recovered from a
+companion pickle. Future releases should lock notebooks, checkpoints,
+configurations, probabilities, source hashes, and deterministic merge rules.
+No external cohort, prospective workflow, reader study, calibration transfer,
+or outcome analysis was performed. Reports, acquisition protocols, prevalence,
+and label processes may differ elsewhere. Correct preprocessing and loss,
+matched controls, independent labels, counterfactual report tests, and external
+validation are required before general or clinical claims.

@@ -1,0 +1,118 @@
+% MedVision manuscript -- reporting statements
+
+\section{Reporting statements}\label{sec:reporting}
+
+\subsection*{Ethics approval and consent}
+MIMIC-CXR is de-identified and was accessed through official PhysioNet
+credentialing and its Data Use Agreement. No participants, direct identifiers,
+or identifying images were involved; consent was not applicable. The source
+resource was released under its institutional review-board approvals; this
+secondary analysis involved no new recruitment, intervention, or contact with
+participants. Any local institutional exemption or waiver identifier can be
+added here if the target institution requires one.
+
+\subsection*{Data availability}
+Raw MIMIC-CXR images and reports remain under PhysioNet access controls and are
+not redistributed. Notebooks, scripts, manifests, configurations, figures, and
+non-identifying summaries are available at
+\url{https://github.com/i-mTanvir/MediVision}. The release includes environment
+information, source history, and the documented merge rule.
+
+\subsection*{Code availability}
+Reproducible notebooks, LaTeX source, figure scripts, and environment records
+are available at \url{https://github.com/i-mTanvir/MediVision}. A permanent DOI
+will be added if an archival release is deposited. Credentials, raw reports,
+and identifiers are excluded.
+
+\subsection*{Funding}
+This research received no specific public, commercial, or not-for-profit grant
+and was self-funded by the authors. No external sponsor influenced design, data
+access, analysis, interpretation, writing, or the decision to submit.
+
+\subsection*{Declaration of competing interest}
+The authors declare no known competing financial interests or personal
+relationships that could have influenced this work.
+
+\subsection*{Author contributions}
+Nafis Al Rahman and Tanvir Mahmud contributed equally to conceptualization,
+methodology, investigation, software, analysis, visualization, and the original
+draft. Both validated, interpreted, revised, and approved the manuscript.
+
+\subsection*{Acknowledgements}
+The authors thank PhysioNet and the MIMIC-CXR data custodians for maintaining
+the de-identified resource and controlled-access infrastructure.
+
+\subsection*{Generative-AI disclosure}
+Generative-AI tools were not used to generate study data, execute analyses,
+create scientific results, or make study decisions. Any language or formatting
+assistance used during manuscript preparation was reviewed and approved by both
+authors, who accept responsibility for the final content.
+
+\subsection*{Supplementary materials}
+
+\subsubsection*{Table S1. Training hyperparameters}
+\begin{center}
+\scriptsize
+\begin{tabular}{p{0.31\linewidth}p{0.61\linewidth}}
+\toprule
+Setting & Value \\
+\midrule
+Image encoder & TorchXRayVision DenseNet-121, res224 MIMIC weights \\
+Text encoder & Bio\_ClinicalBERT; first four transformer layers frozen \\
+Optimizer & AdamW; weight decay $10^{-4}$ \\
+Learning rates & $10^{-5}$ image/text; $10^{-4}$ heads; $5\times10^{-5}$ static gates \\
+Schedule & OneCycleLR with 10\% warm-up; 10 epochs \\
+Batching & Physical batch 8; four accumulation steps; effective batch 32 \\
+Objective & Focal cross-entropy ($\gamma=1.5$), label smoothing 0.05, effective-number $\beta=0.99$ \\
+Precision & FP16 mixed precision with gradient scaling \\
+Gate initialisation & $u=(-0.5,0,0.5)$; $\alpha=(0.426524,0.500000,0.573476)$ \\
+Augmentation & Training crop/flip/rotation/translation/jitter; class-aware minority transform \\
+Seeds & 42, 123, 456, 789, 1010, 1111, 1212, 1313 \\
+Hardware & Kaggle NVIDIA T4 (two-GPU environment) \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\subsubsection*{Table S2. CLAIM 2024 checklist summary}
+\begin{center}
+\begin{tabular}{lrl}
+\toprule
+Status & Count & Interpretation \\
+\midrule
+Yes & 13 & Reported or directly auditable in the manuscript/archive \\
+Partial & 10 & Partly reported or limited by inherited archive constraints \\
+No & 4 & Not available in the inherited experiment \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\subsubsection*{Table S3. TRIPOD+AI checklist summary}
+\begin{center}
+\begin{tabular}{lrl}
+\toprule
+Status & Count & Interpretation \\
+\midrule
+Yes & 9 & Reported or directly auditable \\
+Partial & 18 & Partly reported or limited by inherited archive constraints \\
+No & 14 & Not available in the inherited experiment \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\subsubsection*{Table S4. Provenance manifest}
+\begin{center}
+\scriptsize
+\resizebox{\linewidth}{!}{%
+\begin{tabular}{l l c l l}
+\toprule
+Condition & Source notebook & Seeds & Retained outputs & Known defect or caveat \\
+\midrule
+Baseline CADQ & \texttt{medvision-q1-audit-final-FIXED-MERGE-v2.ipynb} & 8 & Predictions, probabilities, gate & Duplicate merge snapshot \\
+LMH (PoE) & Same fixed-merge notebook & 8 & Predictions, probabilities & Lower AUROC and calibration \\
+Noise-Consistency & Same fixed-merge notebook & 8 & Predictions, probabilities & Archived negative-KL sign \\
+GACR-B & Same fixed-merge notebook & 8 post hoc & Predictions, probabilities & Added after initial plan \\
+Adaptive-CADQ & Same fixed-merge notebook & 8 (post hoc extension) & Predictions, probabilities & Seed extension post hoc; gate extraction absent \\
+Gray-Square & Audit archive & Single retained run & Predictions, probabilities & Reused control for paired ICM \\
+\bottomrule
+\end{tabular}}
+\end{center}
