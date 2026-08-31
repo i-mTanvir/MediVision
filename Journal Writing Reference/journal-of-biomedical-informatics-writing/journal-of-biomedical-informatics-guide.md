@@ -241,6 +241,8 @@ Before opening a JBI submission, confirm:
 
 ## Sources
 
+- [Latest five JBI Original Research papers and access links](latest-five-papers/README.md)
+
 - [ScienceDirect JBI journal page](https://www.sciencedirect.com/journal/journal-of-biomedical-informatics)
 - [ScienceDirect JBI Guide for Authors](https://www.sciencedirect.com/journal/journal-of-biomedical-informatics/publish/guide-for-authors)
 - [Elsevier medical-informatics journal overview](https://www.elsevier.com/en-in/subject/medical-informatics/journals)
