@@ -10,6 +10,11 @@ Use this skill only for the Elsevier journal whose ScienceDirect page is
 Read `journal-of-biomedical-informatics-guide.md` before changing the
 manuscript.
 
+For recent JBI structure and style, also consult
+`recent-five-paper-analysis.md`. It contains the measured abstract/main-text
+patterns, section architecture, figure/table conventions and a MedVision-
+specific reviewer checklist extracted from five supplied JBI papers.
+
 JBI is a methodology journal. A submission must make a generalizable
 biomedical-informatics methodological contribution, not merely report a model
 or a dataset-specific imaging result. Scope, article type, word limits,
