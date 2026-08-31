@@ -598,12 +598,23 @@ retained comparator, not an estimate from two independently replicated arms.
 
 \begin{figure}[pos=htbp]
 \centering
+% Compact horizontal panel layout preserves the complete audit while avoiding
+% an otherwise dedicated float page in the single-column review format.
+\begin{minipage}[t]{0.32\linewidth}
+\centering
 \textbf{(a)}\par\smallskip
-\includegraphics[width=0.55\linewidth]{paired_vlm_gray_square.png}\par\medskip
+\includegraphics[width=0.98\linewidth]{paired_vlm_gray_square.png}
+\end{minipage}\hfill
+\begin{minipage}[t]{0.32\linewidth}
+\centering
 \textbf{(b)}\par\smallskip
-\includegraphics[width=0.55\linewidth]{icm_tost_master.png}\par\medskip
+\includegraphics[width=0.98\linewidth]{icm_tost_master.png}
+\end{minipage}\hfill
+\begin{minipage}[t]{0.32\linewidth}
+\centering
 \textbf{(c)}\par\smallskip
-\includegraphics[width=0.55\linewidth]{gate_stagnation_with_dots.png}
+\includegraphics[width=0.98\linewidth]{gate_stagnation_with_dots.png}
+\end{minipage}
 \caption{Modality-contribution and gate audit. (a) Baseline VLM Macro-F1 at
 each seed paired with the retained Gray-Square reference; lines show the small
 differences used to construct ICM. (b) Mean ICM with percentile bootstrap 95\%
