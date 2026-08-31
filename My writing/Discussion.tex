@@ -25,7 +25,7 @@ neither collapses nor learns because the report pathway already supplies a
 strong label-correlated signal, leaving insufficient gradient incentive for
 image reliance.
 
-\subsection{Label--report circularity and endpoint validity}
+\textbf{Label--report circularity and endpoint validity.}
 MIMIC-CXR radiographs are paired with reports, CheXpert labels are generated
 from report language, and the model receives the report’s \texttt{findings}
 field \citep{johnson2019mimiccxr,irvin2019chexpert}. The task therefore does not
@@ -50,7 +50,7 @@ counter the dominant report shortcut. This is a limitation of the label--input
 relationship, not a claim that the proposed intervention is ineffective under
 independent labels.
 
-\subsection{Architectural and statistical interpretation}
+\subsection{Architectural, statistical, and regulatory interpretation}
 The attention block contains one projected image token and one projected text
 token. Its single-key attention cannot express word--region alignment, so its
 weights and Grad-CAM examples are not causal grounding evidence. High Macro-F1,
@@ -66,7 +66,7 @@ modality ranking. Confirmatory work should train matched controls at every seed
 and propagate their variation. Seed-level pairing is appropriate because the
 same 455 studies recur; pooled subject results are descriptive only.
 
-\subsection{Implications for evaluation and future study design}
+\textbf{Implications for evaluation and future study design.}
 Modality contribution should be audited directly rather than inferred from a
 high multimodal score. Future studies should combine report-preserving image
 ablation with independent or image-derived labels, masked or temporally

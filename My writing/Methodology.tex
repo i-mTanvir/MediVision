@@ -3,7 +3,7 @@
 
 \section{Methods}\label{sec:methods}
 
-\subsection{Study design and analysis scope}\label{sec:study-design}
+\subsection{Study design, data source, and cohort construction}\label{sec:study-design}
 We conducted a controlled audit of a medical vision--language classifier. The
 estimand was the incremental image contribution when the report remained
 available. The principal intervention replaced each radiograph with a uniform
@@ -42,7 +42,7 @@ downloads were removed before the final 2,953-study cohort was partitioned.}
 \label{fig:cohort-flow}
 \end{figure}
 
-\subsection{Data source and cohort construction}\label{sec:data-cohort}
+\textbf{Cohort construction.}
 MIMIC-CXR JPG images and reports were accessed through PhysioNet credentialing
 and the applicable Data Use Agreement \citep{johnson2019mimiccxr}. From 2,962
 candidate records, nine missing JPG files were removed, leaving 2,953 studies
@@ -79,7 +79,7 @@ resized and mapped. The archived $[-1,1]$ mapping may not match the native
 TorchXRayVision convention and requires a corrected rerun
 \citep{cohen2022torchxrayvision}.
 
-\subsection{Model architecture}\label{sec:architecture}
+\subsection{Model architecture, variants, and controls}\label{sec:architecture}
 The image branch used TorchXRayVision (XRV) DenseNet-121 with
 \texttt{densenet121-res224-mimic\_ch} weights \citep{huang2017densenet,cohen2022torchxrayvision}.
 Its output was projected to 512 dimensions with linear, LayerNorm, Gaussian
@@ -92,7 +92,7 @@ in an eight-head batch-first attention block with residual LayerNorm. This is a
 feature interaction, not token-level word--region alignment; its single-key
 attention is degenerate and is not interpreted as causal grounding.
 
-\subsection{Fusion variants and controls}\label{sec:variants}
+\textbf{Variants and controls.}
 CADQ produced image and text logits and combined them with a learnable
 per-class gate \citep{arevalo2017gmu}:
 \begin{equation}
@@ -127,7 +127,7 @@ All controls used the same test studies. Image-only used the XRV encoder and a
 intensity-128 tensor while preserving the report and multimodal path. Retained
 image-only and Gray-Square outputs were single runs, not seed ensembles.
 
-\subsection{Training and checkpoint selection}\label{sec:training}
+\subsection{Training, endpoints, and statistical analysis}\label{sec:training}
 Models were trained for 10 epochs with AdamW \citep{loshchilov2019adamw}, differential learning rates of
 $10^{-5}$ for image/text backbones, $10^{-4}$ for fusion and LMH heads, and
 $5\times10^{-5}$ for static gates; weight decay was $10^{-4}$. OneCycleLR used
@@ -140,7 +140,7 @@ Macro-F1 checkpoint was restored for multimodal variants. The archived
 image-only control did not consistently restore its best state and is
 descriptive.
 
-\subsection{Endpoints and statistical analysis}\label{sec:statistics}
+\textbf{Endpoints and statistical analysis.}
 The primary endpoint was
 \begin{equation}
 \mathrm{ICM}=\frac{F1_{VLM}-F1_{Gray}}{F1_{VLM}},

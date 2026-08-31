@@ -110,6 +110,7 @@ The authoritative sources are:
 - `My writing/methodology_references.bib`
 - `My writing/figures/`
 - `My writing/MedVision_Q1_Master.pdf`
+- `My writing/MedVision_Q1_Supplementary.tex` (Tables S2--S4; submit as a separate supplement when requested)
 
 ### Build the manuscript
 
@@ -124,6 +125,11 @@ pdflatex -interaction=nonstopmode -halt-on-error MedVision_Q1_Master.tex
 ```
 
 Alternatively, run `compile_informatics_health.ps1` from the repository root.
+
+The main manuscript is 15 pages.  The checklist and provenance tables are kept
+in the one-page `MedVision_Q1_Supplementary.tex` companion so that the review
+copy remains readable; Table S1 (training hyperparameters) remains in the main
+manuscript's reporting statements.
 
 ## Interpretation and reproducibility notes
 

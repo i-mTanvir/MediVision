@@ -34,6 +34,10 @@ __pycache__/
 /New Added/untitled folder/medvision_final/
 /New Added/untitled folder/__huggingface_repos__.json
 /New Added/untitled folder/*.png
+/_compact_check*/
+/_final_render*/
+/_final_main_render/
+/_page_counts*/
 
 # LaTeX build artefacts (source, figures, and final manuscript PDF remain tracked)
 *.aux

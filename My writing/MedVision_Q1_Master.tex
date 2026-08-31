@@ -14,6 +14,12 @@
 
 \graphicspath{{figures/}}
 
+% Compact float spacing keeps the single-column review layout readable without
+% allowing figures and captions to create avoidable blank pages.
+\setlength{\floatsep}{7pt plus 2pt minus 2pt}
+\setlength{\textfloatsep}{8pt plus 2pt minus 2pt}
+\setlength{\intextsep}{8pt plus 2pt minus 2pt}
+
 % Use a clean manuscript page style: suppress the CAS template's default
 % running title and the "Preprint submitted to Elsevier" footer while
 % retaining unobtrusive page numbering.
@@ -90,6 +96,8 @@ medical vision--language model \sep modality inertia \sep gate stagnation
 \input{Reporting_Statements.tex}
 
 \bibliographystyle{cas-model2-names}
+% Keep the full reference list while allowing it to occupy a compact final page.
+\renewcommand{\bibfont}{\fontsize{7pt}{8pt}\selectfont}
 \bibliography{related_work_references,methodology_references}
 
 \end{document}

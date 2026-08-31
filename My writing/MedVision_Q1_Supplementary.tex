@@ -1,0 +1,57 @@
+% Supplementary tables for the MedVision manuscript.
+% Compile independently when the journal requests a separate supplement.
+\documentclass[a4paper,11pt]{article}
+\usepackage[margin=22mm]{geometry}
+\usepackage{booktabs}
+\usepackage{graphicx}
+\usepackage{array}
+\usepackage[T1]{fontenc}
+\begin{document}
+
+\section*{Supplementary tables}
+
+\subsection*{Table S2. CLAIM 2024 checklist summary}
+\begin{center}
+\begin{tabular}{lrl}
+\toprule
+Status & Count & Interpretation \\
+\midrule
+Yes & 13 & Reported or directly auditable in the manuscript/archive \\
+Partial & 10 & Partly reported or limited by inherited archive constraints \\
+No & 4 & Not available in the inherited experiment \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\subsection*{Table S3. TRIPOD+AI checklist summary}
+\begin{center}
+\begin{tabular}{lrl}
+\toprule
+Status & Count & Interpretation \\
+\midrule
+Yes & 9 & Reported or directly auditable \\
+Partial & 18 & Partly reported or limited by inherited archive constraints \\
+No & 14 & Not available in the inherited experiment \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\subsection*{Table S4. Provenance manifest}
+\begin{center}
+\scriptsize
+\resizebox{\linewidth}{!}{%
+\begin{tabular}{l l c l l}
+\toprule
+Condition & Source notebook & Seeds & Retained outputs & Known defect or caveat \\
+\midrule
+Baseline CADQ & \texttt{medvision-q1-audit-final-FIXED-MERGE-v2.ipynb} & 8 & Predictions, probabilities, gate & Duplicate merge snapshot \\
+LMH (PoE) & Same fixed-merge notebook & 8 & Predictions, probabilities & Lower AUROC and calibration \\
+Noise-Consistency & Same fixed-merge notebook & 8 & Predictions, probabilities & Archived negative-KL sign \\
+GACR-B & Same fixed-merge notebook & 8 post hoc & Predictions, probabilities & Added after initial plan \\
+Adaptive-CADQ & Same fixed-merge notebook & 8 (post hoc extension) & Predictions, probabilities & Seed extension post hoc; gate extraction absent \\
+Gray-Square & Audit archive & Single retained run & Predictions, probabilities & Reused control for paired ICM \\
+\bottomrule
+\end{tabular}}
+\end{center}
+
+\end{document}

@@ -23,7 +23,7 @@ aligned with the current journal instructions.
 - `natbib` citation commands resolve in the integrated manuscript.
 - All seven local figure assets are found through the `figures/` path and render in the output PDF.
 - Figure and table placement uses the CAS key-value float syntax (`pos=htbp`) rather than the generic `H` specifier.
-- The final build has no LaTeX errors, undefined citations, undefined references, or missing figures. One title-page overfull-box warning and the associated harmless CAS/hyperref empty-anchor warning remain; visual inspection showed no clipping.
+- The final 15-page build has no LaTeX errors, undefined citations, undefined references, or missing figures. A title-page overfull-box warning and a few underfull boxes from long FDA URLs remain; visual inspection showed no clipping or unreadable content.
 - The integrated PDF was rendered to page images and representative text, table, figure, discussion, reporting, and bibliography pages were visually checked for clipping and missing assets.
 - Abbreviations were audited for first-use definitions; the abstract retains only the defined ICM abbreviation, with the placement map documented in `Informatics_and_Health_abbreviation_audit.md`.
 
@@ -36,7 +36,7 @@ aligned with the current journal instructions.
 - Review the title wording and decide whether “audit” or “empirical study” best matches the final scope.
 - Before release, archive the exact notebook commit/hash, configuration files, figure-generation scripts, and deterministic merge manifest referenced by the manuscript.
 - The section-level word-count audit is in `Informatics_and_Health_word_limit_audit.md`; after compression, the main narrative is approximately 3,676 words and the conservative rendered pre-bibliography count is approximately 4,923, both within the journal's 5,000-word Research Article limit.
-- Figures 6--11 received a visual-size pass in `Results.tex` (0.60--0.82\textwidth, selected per figure); the rebuilt 17-page PDF was checked for legibility, clipping, and caption placement.
+- Figures 6--12 received a visual-size pass in `Results.tex` (selected widths preserve legibility while reducing float height); the rebuilt 15-page PDF was checked for legibility, clipping, and caption placement. Tables S2--S4 are supplied in the separate one-page `MedVision_Q1_Supplementary.tex` companion; Table S1 remains in the main manuscript.
 - The current source still uses author--year `natbib` output for readability during drafting. Before submission, convert citations and the bibliography to the journal's required superscript numeric AMA style and re-run the reference-order audit.
 
 ## Interpretation boundary preserved
