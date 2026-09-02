@@ -49,7 +49,8 @@ MIMIC-CXR-derived classification task and assessed an Image Contribution Metric
 \textbf{Methods:} We analysed 2,953 frontal studies assigned at patient level
 to training (2,049), validation (449), and test (455) sets. Five fusion
 conditions were evaluated across eight seeds: baseline gated fusion, a learned
-text-prior product-of-experts variant, an image-noise variant, an exploratory
+text-prior product-of-experts variant, a noise-sensitivity (anti-consistency)
+condition, an exploratory
 grounding-aware variant, and an adaptive-gate variant. The primary intervention
 replaced the radiograph with a constant gray image while preserving the report.
 ICM measured the relative Macro-F1 difference between the full model and this
@@ -276,11 +277,12 @@ uncertain-to-negative mapping \cite{irvin2019chexpert}; the model received the
 same report's \texttt{findings} field. The experiment consequently audits
 label-report circularity rather than an independent radiograph-only diagnostic
 task. The replication unit for seed-level inference was a trained model at a
-fixed seed. Baseline CADQ, LearnedMixinFusion (LMH), Noise-Consistency,
-GACR-B, and Adaptive-CADQ each had eight retained seeds: 42, 123, 456, 789,
-1010, 1111, 1212, and 1313. The eight-seed plan covered baseline, LMH, and
-Noise-Consistency; Adaptive-CADQ was extended from three to eight seeds after
-the initial run, and GACR-B was added post hoc. The latter two analyses are
+fixed seed. Baseline CADQ, LearnedMixinFusion (LMH), noise-sensitivity
+(anti-consistency), exploratory GACR-B, and Adaptive-CADQ each had eight
+retained seeds: 42, 123, 456, 789, 1010, 1111, 1212, and 1313. The eight-seed
+plan covered baseline, LMH, and noise-sensitivity (anti-consistency);
+Adaptive-CADQ was extended from three to eight seeds after the initial run, and
+exploratory GACR-B was added post hoc. The latter two analyses are
 therefore exploratory.
 
 \subsection{Preprocessing and architecture}\label{sec:architecture}
@@ -296,7 +298,7 @@ jitter; the minority-class transform increased the rotation, translation,
 scale, shear, jitter, and blur ranges. Validation and test preprocessing was
 deterministic. The archived $[-1,1]$ mapping may not match the native
 TorchXRayVision normalization expected by the selected weights; this is an
-implementation limitation requiring a corrected rerun
+implementation limitation that should be addressed in a confirmatory analysis
 \cite{cohen2022torchxrayvision}.
 
 The image branch used a TorchXRayVision DenseNet-121 with
@@ -326,15 +328,16 @@ logistic text prior (5,000 unigram/bigram features, stop-word removal, balanced
 weights), temperature calibration, $\epsilon=0.1$ smoothing, an input-dependent
 prior gate, and an entropy penalty of 0.05 annealed over three epochs. It was
 warm-started from CADQ and followed the product-of-experts rationale used for
-unimodal-bias reduction \cite{cadene2019rubi}. Noise-Consistency perturbed the
+unimodal-bias reduction \cite{cadene2019rubi}. The noise-sensitivity
+(anti-consistency) condition perturbed the
 image with Gaussian noise ($\sigma=0.25$). Its archived objective added
 $-D_{KL}(p_{clean}\|p_{noisy})$ to a minimized loss and therefore rewards
-divergence; throughout this manuscript it is treated as an anti-consistency or
-noise-sensitivity condition, not a valid conventional consistency objective.
+divergence; throughout this manuscript it is treated as a noise-sensitivity
+(anti-consistency) condition, not a conventional consistency objective.
 Adaptive-CADQ replaced the static per-class gate with a sample-dependent scalar
 computed from image and text entropies by a $2\rightarrow16\rightarrow1$
 multilayer perceptron. Exploratory GACR-B used an out-of-fold text baseline and
-a cosine penalty of 0.3 on examples for which that baseline was wrong, following
+a cosine penalty of 0.3 on examples for which that baseline misclassified, following
 the grounding-aware intervention of Sadanandan and Behzadan
 \cite{sadanandan2026consistentdangerous}.
 
@@ -420,14 +423,15 @@ eight seeds each, evaluated on the same 455 held-out studies. Baseline CADQ
 achieved Macro-F1 $0.9397\pm0.0061$, accuracy $0.9607\pm0.0032$, and
 Macro-AUROC $0.9974\pm0.0004$ (Table~\ref{tab:performance}). LMH had the
 highest mean Macro-F1 ($0.9435\pm0.0093$) but lower and more variable AUROC
-($0.9849\pm0.0113$). Noise-Consistency had the lowest Macro-F1
-($0.9346\pm0.0075$). Exploratory GACR-B reached $0.9417\pm0.0059$, and
+($0.9849\pm0.0113$). The noise-sensitivity (anti-consistency) condition had
+the lowest Macro-F1 ($0.9346\pm0.0075$). Exploratory GACR-B reached
+$0.9417\pm0.0059$, and
 Adaptive-CADQ remained close to baseline at $0.9388\pm0.0072$.
 
 \begin{table}[pos=htbp]
 \centering
 \caption{Performance and calibration across eight seeds (mean $\pm$ standard
-deviation). GACR-B was added post hoc and is exploratory.}
+deviation). Exploratory GACR-B was added post hoc.}
 \label{tab:performance}
 \scriptsize
 \setlength{\tabcolsep}{3.2pt}
@@ -438,8 +442,8 @@ Condition & Macro-F1 & Accuracy & Macro-AUROC & ECE & Brier \\
 \midrule
 Baseline CADQ & $0.9397\pm0.0061$ & $0.9607\pm0.0032$ & $0.9974\pm0.0004$ & $0.0237\pm0.0048$ & $0.0522\pm0.0040$ \\
 LMH (PoE) & $0.9435\pm0.0093$ & $0.9596\pm0.0070$ & $0.9849\pm0.0113$ & $0.0621\pm0.0160$ & $0.0685\pm0.0213$ \\
-Noise-Consistency & $0.9346\pm0.0075$ & $0.9560\pm0.0039$ & $0.9960\pm0.0013$ & $0.0347\pm0.0137$ & $0.0655\pm0.0130$ \\
-GACR-B (exploratory) & $0.9417\pm0.0059$ & $0.9610\pm0.0042$ & $0.9972\pm0.0005$ & $0.0245\pm0.0023$ & $0.0540\pm0.0038$ \\
+Noise-sensitivity (anti-consistency) & $0.9346\pm0.0075$ & $0.9560\pm0.0039$ & $0.9960\pm0.0013$ & $0.0347\pm0.0137$ & $0.0655\pm0.0130$ \\
+Exploratory GACR-B & $0.9417\pm0.0059$ & $0.9610\pm0.0042$ & $0.9972\pm0.0005$ & $0.0245\pm0.0023$ & $0.0540\pm0.0038$ \\
 Adaptive-CADQ & $0.9388\pm0.0072$ & $0.9610\pm0.0044$ & $0.9972\pm0.0008$ & $0.0241\pm0.0070$ & $0.0527\pm0.0028$ \\
 \bottomrule
 \end{tabular}}
@@ -448,7 +452,8 @@ Adaptive-CADQ & $0.9388\pm0.0072$ & $0.9610\pm0.0044$ & $0.9972\pm0.0008$ & $0.0
 Baseline per-class F1 was $0.9755\pm0.0032$ for Normal,
 $0.9624\pm0.0055$ for Pneumonia, and $0.8810\pm0.0174$ for
 Pneumothorax. LMH increased Pneumothorax F1 to $0.9003\pm0.0191$ but
-reduced Pneumonia F1 to $0.9575\pm0.0077$. Noise-Consistency had the
+reduced Pneumonia F1 to $0.9575\pm0.0077$. The noise-sensitivity
+(anti-consistency) condition had the
 widest Pneumothorax variation ($0.8753\pm0.0237$). Adaptive-CADQ showed
 the most stable Pneumonia F1 ($0.9616\pm0.0029$). The distributions and
 the retained control contrast are shown in Figure~\ref{fig:performance-controls}.
@@ -470,7 +475,8 @@ than modality rankings.}
 No condition improved Macro-F1 over baseline after Benjamini-Hochberg
 correction (Table~\ref{tab:pairwise}). The largest unadjusted Macro-F1 signal
 was the exploratory GACR-B contrast ($\Delta=0.0020$, Wilcoxon $p=0.0547$;
-adjusted $p=0.2188$). LMH and Noise-Consistency had lower seed-42
+adjusted $p=0.2188$). LMH and the noise-sensitivity (anti-consistency)
+condition had lower seed-42
 Pneumothorax AUROC than baseline; their significant DeLong results indicate
 degradation, not improvement. Adaptive-CADQ showed no AUROC difference.
 
@@ -490,15 +496,16 @@ predictions.}
 Condition & Wilcoxon Macro-F1 $p$ (BH) & DeLong PNX-AUROC $p$ (BH) & McNemar $n_{01}/n_{10}$; $p$ (BH) \\
 \midrule
 LMH (PoE) & 0.2500 (0.3333) & $2.9\times10^{-6}$ ($1.2\times10^{-5}$) & 27/31; 0.6936 (1.0000) \\
-Noise-Consistency & 0.1953 (0.3333) & 0.0022 (0.0044) & 32/49; 0.0754 (0.3018) \\
-GACR-B (exploratory) & 0.0547 (0.2188) & 0.0315 (0.0420) & 9/8; 1.0000 (1.0000) \\
+Noise-sensitivity (anti-consistency) & 0.1953 (0.3333) & 0.0022 (0.0044) & 32/49; 0.0754 (0.3018) \\
+Exploratory GACR-B & 0.0547 (0.2188) & 0.0315 (0.0420) & 9/8; 1.0000 (1.0000) \\
 Adaptive-CADQ & 0.8438 (0.8438) & 0.7304 (0.7304) & 15/14; 1.0000 (1.0000) \\
 \bottomrule
 \end{tabular}}
 \end{table}
 
-The balanced discordance for GACR-B and Adaptive-CADQ is informative but less
-extreme than the stale interpretation in the original draft. GACR-B disagreed
+The balanced discordance for exploratory GACR-B and Adaptive-CADQ is informative
+but less extreme than the stale interpretation in the original draft.
+Exploratory GACR-B disagreed
 with baseline on 17 studies (9 versus 8 across the two off-diagonal directions),
 and Adaptive-CADQ on 29 (15 versus 14). McNemar $p=1.000$ indicates no evidence
 of directional asymmetry in these paired errors; it does not indicate
@@ -516,7 +523,8 @@ the same repeated test cohort.
 matrices aggregated descriptively over seeds; every row is normalized by its
 true class. (b) Per-class receiver-operating-characteristic curves with
 descriptive multi-seed 95\% bands. Significant DeLong results for LMH,
-Noise-Consistency, and GACR-B reflect lower seed-42 Pneumothorax AUROC than
+the noise-sensitivity (anti-consistency) condition and exploratory GACR-B reflect
+lower seed-42 Pneumothorax AUROC than
 baseline, not improvement. DeLong inference was not performed on subjects
 pooled across seeds.}
 \label{fig:error-roc}
@@ -526,8 +534,9 @@ Calibration separated some conditions that had similar Macro-F1. Baseline ECE
 was $0.0237\pm0.0048$ and Brier score $0.0522\pm0.0040$. LMH increased ECE
 to $0.0621\pm0.0160$ (2.6-fold) and Brier score to
 $0.0685\pm0.0213$; the adjusted seed-level $p$-values were 0.0313 and 0.0156.
-Noise-Consistency increased Brier score to $0.0655\pm0.0130$ (adjusted
-$p=0.0156$), whereas its ECE change was inconclusive. GACR-B and
+The noise-sensitivity (anti-consistency) condition increased Brier score to
+$0.0655\pm0.0130$ (adjusted $p=0.0156$), whereas its ECE change was
+inconclusive. Exploratory GACR-B and
 Adaptive-CADQ remained close to baseline. Figure~\ref{fig:calibration} shows
 the baseline reliability diagram and seed-level ECE distributions.
 
@@ -556,15 +565,16 @@ achieved 0.8555, 0.9077, 0.9820, 0.0203, and 0.1289, respectively. The
 Gray-Square control achieved Macro-F1 0.9381, accuracy 0.9604, Macro-AUROC
 0.9960, ECE 0.0369, and Brier score 0.0589. Its Macro-F1 was only 0.0016 below
 the baseline eight-seed mean. Because these were single retained runs and the
-image-only checkpoint was not selected consistently, they support an audit of
+image-only checkpoint was not selected uniformly, they support an audit of
 the archived system but not a definitive ranking of modality capacity.
 
 Baseline ICM was $0.0016\pm0.0065$ with median 0.0014 and bootstrap 95\%
 confidence interval $[-0.0026,0.0061]$ (Table~\ref{tab:icm}). The signed-rank
 test did not reject zero ($p=0.4219$), while TOST supported equivalence inside
 the operational interval ($p=0.0040$). LMH had ICM $0.0056\pm0.0098$ and did
-not meet the equivalence criterion. Noise-Consistency had a negative mean ICM
-($-0.0039\pm0.0081$), whereas exploratory GACR-B and Adaptive-CADQ had small
+not meet the equivalence criterion. The noise-sensitivity (anti-consistency)
+condition had a negative mean ICM ($-0.0039\pm0.0081$), whereas exploratory
+GACR-B and Adaptive-CADQ had small
 positive values. None showed a robust positive contribution relative to the
 Gray-Square reference.
 
@@ -583,8 +593,8 @@ Condition & Mean & SD & Median & 95\% CI & Wilcoxon $p$ & TOST $p$ & Cohen's $d$
 \midrule
 Baseline & 0.0016 & 0.0065 & 0.0014 & $[-0.0026,0.0061]$ & 0.4219 & 0.0040 & 0.247 \\
 LMH (PoE) & 0.0056 & 0.0098 & 0.0066 & $[-0.0011,0.0118]$ & 0.1953 & 0.1223 & 0.566 \\
-Noise-Consistency & -0.0039 & 0.0081 & -0.0009 & $[-0.0097,0.0009]$ & 0.3828 & 0.0345 & -0.476 \\
-GACR-B (exploratory) & 0.0038 & 0.0062 & 0.0030 & $[-0.0002,0.0081]$ & 0.1953 & 0.0122 & 0.607 \\
+Noise-sensitivity (anti-consistency) & -0.0039 & 0.0081 & -0.0009 & $[-0.0097,0.0009]$ & 0.3828 & 0.0345 & -0.476 \\
+Exploratory GACR-B & 0.0038 & 0.0062 & 0.0030 & $[-0.0002,0.0081]$ & 0.1953 & 0.0122 & 0.607 \\
 Adaptive-CADQ & 0.0007 & 0.0077 & 0.0002 & $[-0.0043,0.0057]$ & 0.8438 & 0.0054 & 0.089 \\
 \bottomrule
 \end{tabular}}
@@ -666,7 +676,7 @@ with a report, CheXpert uses report language to generate the target, and the
 model receives the report's \texttt{findings} field
 \cite{johnson2019mimiccxr,irvin2019chexpert}. The Gray-Square control preserves
 this high-information route. It does not show that the CheXpert labels are
-clinically wrong, that every prediction copied a particular phrase, or that
+clinically inaccurate, that every prediction copied a particular phrase, or that
 radiographs lack diagnostic value. It shows that the evaluated endpoint does
 not isolate independent image-based recognition. The claim supported by the
 data is therefore narrow: under this report-linked setup and archived
@@ -685,16 +695,17 @@ The debiasing results clarify why endpoint design matters. Product-of-experts
 methods are intended to suppress an easy language prior. Here, however, report
 language helped generate the target. Down-weighting this pathway can degrade
 AUROC or calibration without creating new image information, as observed for
-LMH. Noise-Consistency cannot support its intended interpretation because the
-archived negative-KL sign rewards divergence. Adaptive-CADQ changed the gate
-form but not the endpoint. Exploratory GACR-B, following the grounding-aware
+LMH. The noise-sensitivity (anti-consistency) condition cannot support its
+intended conventional-consistency interpretation because its archived
+negative-KL formulation rewards divergence. Adaptive-CADQ changed the gate form
+but not the endpoint. Exploratory GACR-B, following the grounding-aware
 proposal of Sadanandan and Behzadan
 \cite{sadanandan2026consistentdangerous}, achieved a small ICM but not a robust
 Macro-F1 improvement. The experiment did not measure whether its $\lambda=0.3$
 penalty generated insufficient gradient; that mechanism requires a dedicated
 ablation and is not inferred from the null performance result.
 
-The corrected McNemar interpretation is also important. GACR-B and
+The corrected McNemar interpretation is also important. Exploratory GACR-B and
 Adaptive-CADQ had $p=1.000$, but both had non-zero discordant predictions. The
 off-diagonal counts were nearly balanced, so McNemar detected no directional
 change in error rates. This supports a conclusion of similar aggregate paired
@@ -752,21 +763,23 @@ prospective workflow, reader study, subgroup analysis, decision-curve analysis,
 or outcome evaluation was available. Generalization to other reports,
 institutions, devices, and label processes is unknown.
 
-Implementation defects limit causal interpretation. Image values were mapped
-to $[-1,1]$, which may not match the native TorchXRayVision convention for the
-selected weights. The Noise-Consistency objective had the wrong KL sign. The
-attention block used one token per modality. Image-only checkpoint restoration
-was inconsistent. These defects cannot be repaired by manuscript wording; the
-affected experiments require rerunning. The current findings audit the archived
-system and should not be presented as a definitive test of correctly
-implemented noise consistency or optimized image-only performance.
+Implementation limitations constrain causal interpretation. Image values were
+mapped to $[-1,1]$, which may not match the native TorchXRayVision convention
+for the selected weights. The noise-sensitivity (anti-consistency) condition
+used a negative-KL formulation that rewards divergence. The attention block
+used one token per modality. Image-only checkpoint restoration was not uniform.
+These limitations cannot be resolved by manuscript wording; the affected
+experiments need confirmatory reanalysis. The current findings audit the
+archived system and should not be presented as a definitive evaluation of
+correctly implemented noise-sensitivity (anti-consistency) or optimized
+image-only performance.
 
 Control and statistical asymmetries also matter. The same single Gray-Square
 run was reused to construct eight ICM values, so comparator uncertainty was not
 propagated. Eight seeds provide a small replication sample. DeLong and McNemar
 results were computed only from the retained seed-42 arrays, whereas
 seed-aggregated curves are descriptive. Adaptive-CADQ's eight-seed extension and
-GACR-B were post hoc. No a priori sample-size calculation established power for
+exploratory GACR-B were post hoc. No a priori sample-size calculation established power for
 a clinically meaningful ICM. Future studies should train every control at every
 seed, preregister the equivalence margin and estimand, and use a larger
 independent-label cohort.
@@ -949,10 +962,10 @@ Condition & Seed coverage & Retained outputs & Known constraint \\
 \midrule
 Baseline CADQ & 8 seeds & Metrics, predictions, probabilities, gates & Image normalization requires confirmation against XRV convention \\
 LMH (PoE) & 8 seeds & Metrics, predictions, probabilities & Warm-started; calibration degraded \\
-Noise-Consistency & 8 seeds & Metrics, predictions, probabilities & Negative KL sign rewards divergence \\
-GACR-B & 8 seeds & Metrics, predictions, recovered probabilities & Added post hoc; merge provenance was not hash-locked \\
+Noise-sensitivity (anti-consistency) & 8 seeds & Metrics, predictions, probabilities & Negative-KL formulation rewards divergence \\
+Exploratory GACR-B & 8 seeds & Metrics, predictions, recovered probabilities & Added post hoc; merge provenance was not hash-locked \\
 Adaptive-CADQ & 8 seeds & Metrics, predictions, probabilities & Extended from three to eight seeds post hoc \\
-Controls & One retained run each & Metrics and selected arrays & Gray-Square uncertainty not replicated; image-only best-checkpoint restoration inconsistent \\
+Controls & One retained run each & Metrics and selected arrays & Gray-Square uncertainty not replicated; image-only best-checkpoint restoration was not uniform \\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -971,8 +984,8 @@ Condition & Normal & Pneumonia & Pneumothorax \\
 \midrule
 Baseline & 0.975 [0.946, 0.988] & 0.947 [0.903, 0.972] & 0.894 [0.774, 0.954] \\
 LMH (PoE) & 0.962 [0.929, 0.980] & 0.947 [0.903, 0.972] & 0.894 [0.774, 0.954] \\
-Noise-Consistency & 0.962 [0.929, 0.980] & 0.947 [0.903, 0.972] & 0.894 [0.774, 0.954] \\
-GACR-B & 0.975 [0.946, 0.988] & 0.947 [0.903, 0.972] & 0.894 [0.774, 0.954] \\
+Noise-sensitivity (anti-consistency) & 0.962 [0.929, 0.980] & 0.947 [0.903, 0.972] & 0.894 [0.774, 0.954] \\
+Exploratory GACR-B & 0.975 [0.946, 0.988] & 0.947 [0.903, 0.972] & 0.894 [0.774, 0.954] \\
 Adaptive-CADQ & 0.979 [0.952, 0.991] & 0.953 [0.910, 0.976] & 0.894 [0.774, 0.954] \\
 \bottomrule
 \end{tabular}
