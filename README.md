@@ -1,5 +1,10 @@
 # MediVision: Auditing Modality Inertia in Medical Vision–Language Models
 
+> **Current handoff:** see [PROJECT_CONTEXT.md](PROJECT_CONTEXT.md) for the active
+> JBI V2 manuscript, methodology-diagram decisions, and pending manual image
+> upload. The original Informatics and Health workflow documented below is
+> retained as a fallback, not the active writing target.
+
 [![Status: research artifact](https://img.shields.io/badge/status-research%20artifact-355C7D)](#project-status)
 [![Manuscript: Informatics and Health](https://img.shields.io/badge/target-Informatics%20and%20Health-2F7D32)](#manuscript)
 [![LaTeX](https://img.shields.io/badge/manuscript-LaTeX-008080?logo=latex)](#build-the-manuscript)
