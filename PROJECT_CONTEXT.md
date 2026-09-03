@@ -4,16 +4,16 @@ Updated: 2026-09-03
 
 ## Latest user decision
 
-The user will correct and manually upload the methodology image. This turn is
-a context-only update: do not replace an image, edit the manuscript, or compile
-a new PDF. Wait for the user's updated image and instruction to integrate it.
-The last displayed image is a review candidate, not an approved final figure.
+The user supplied `D:/Downlodes/Methodology Diagram (1).png` and explicitly
+requested its integration. It is now the active A-C image for Figure 1. The
+image pixels were copied unchanged; the earlier versioned figures remain for
+rollback.
 
 ## Active manuscript and source priority
 
 - Active target: Journal of Biomedical Informatics (JBI).
 - Active manuscript: `My writing/MedVision_JBI_V2.tex` and its compiled PDF.
-- Current compiled version: 15 pages, from commit `6107992`.
+- Current compiled version remains 15 pages after the methodology-image update.
 - This is an internal working manuscript for subsequent team/supervisor review;
   do not describe it as submission-ready.
 - Preserve `My writing/MedVision_Q1_Master.tex` and its PDF as the separate
@@ -31,20 +31,16 @@ The last displayed image is a review candidate, not an approved final figure.
 ## Methodology image state
 
 - Currently embedded A-C asset:
-  `My writing/figures/methodology_diagram_v2_abc.png`.
-- That asset is an unchanged copy of
-  `D:/Downlodes/Telegram Desktop/Methodology Diagram v2.png`; it is older than
-  the successive screenshots reviewed in this conversation.
+  `My writing/figures/methodology_diagram_v3_abc.png`.
+- It is an unchanged copy of
+  `D:/Downlodes/Methodology Diagram (1).png`.
+- The preceding `methodology_diagram_v2_abc.png` remains available for rollback.
 - The older `My writing/figures/methodology.png` is preserved, not overwritten.
 - Current Figure 1 retains `My writing/figures/cohort_flow.png` as panel D.
   Panel C is the audit workflow and does not duplicate cohort selection.
-- Most recent review screenshot:
-  `C:/Users/USER/AppData/Local/Temp/codex-clipboard-8e914beb-c1b3-4dde-9805-dedce301e943.png`.
-  This temporary path is only a review reference; do not assume it is the file
-  the user will ultimately upload or that it will persist.
-- The current caption identifies A-C as a proposed schematic with unresolved
-  implementation differences. After a corrected image is supplied, recheck
-  those differences and update only caveats that the image actually resolves.
+- The current caption treats A-C as a conceptual overview and states the V2
+  boundaries needed to avoid reading its arrows or statistical icons as added
+  experiments.
 
 ## Diagram content to preserve or correct
 
@@ -65,16 +61,11 @@ The last displayed image is a review candidate, not an approved final figure.
   image/text representations -> cross-attention and classification heads ->
   class logits -> CADQ per-class gated logit fusion -> softmax -> class
   probabilities (Normal, Pneumonia, Pneumothorax).
-- The latest screenshot still places a box named "Per-class logit fusion"
-  before the gate. The last suggested correction is to rename that middle box
-  "Image/text classification heads -> class logits", and rename the gate box
-  "CADQ per-class gated logit fusion; alpha in [0.20, 0.80]".
-- Replace the final neural-network illustration with a clear softmax/probability
-  output if necessary; do not imply a new learned classifier after gated logits.
-- Remove the remaining unexplained `0.74` and unused vertical strokes from the
-  text-encoder illustration.
-- Connect prediction probabilities to the audit's "Save probabilities + labels"
-  step. Gate extraction should be traced to saved checkpoints, not predictions.
+- The supplied image retains a conceptual "Per-class logit fusion" before its
+  gate box, one unexplained `0.74` under the text encoder, and no explicit arrow
+  from class probabilities to saved audit outputs. The caption therefore says
+  its arrows are not a literal layer-by-layer graph; do not infer new executed
+  operations from those visual details.
 - "Audit summary & visualizations" is acceptable for the audit output. The
   model does not generate radiology reports.
 
@@ -156,4 +147,3 @@ When the user supplies the corrected image and requests integration:
 6. Commit only task-related files with a meaningful message and push to
    `https://github.com/i-mTanvir/MediVision.git` on `main`, following the user's
    standing versioning instruction. Do not include unrelated untracked folders.
-

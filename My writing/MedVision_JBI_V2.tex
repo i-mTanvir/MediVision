@@ -254,21 +254,20 @@ selection and the patient-level split.
 \begin{figure}[pos=p]
 \centering
 % Panels (a)--(c) are already labelled within the supplied artwork.
-\includegraphics[width=\linewidth]{methodology_diagram_v2_abc.png}\par\medskip
+\includegraphics[width=\linewidth]{methodology_diagram_v3_abc.png}\par\medskip
 \textbf{(d)}\par\smallskip
 \includegraphics[height=0.35\textheight,keepaspectratio]{cohort_flow.png}
-\caption{Study design and proposed schematic. (a) Image pathway.
-(b) Report pathway and fusion. (c) Five-condition, eight-seed audit workflow,
-ICM, retained-gate inspection, and controls. Panels (a--c) reproduce a working
-schematic pending implementation alignment: the archived model used
-512-dimensional projections, findings-only Bio\_ClinicalBERT input, single-key
-attention, and a static per-class baseline logit gate, not the displayed
-input-dependent feature gate. It predicted classes, not reports. The displayed
-permutation analysis is not part of the reported inference; DeLong and McNemar
-used retained seed-42 outputs, and each control had one retained run. These
-panel details must not be read as additional experiments.
-(d) Retained cohort-construction flow: nine unavailable JPG files were removed
-before the final 2,953-study cohort was partitioned at patient level.}
+\caption{Study design and audit workflow. (a) DenseNet-121 image pathway.
+(b) Bio\_ClinicalBERT report pathway. (c) Cross-attention, per-class CADQ
+fusion, five-condition eight-seed audit, ICM, retained-gate inspection, and
+controls. The architecture panel is a conceptual overview; the archived model
+used 512-dimensional projections, findings-only text, separate class logits,
+and a static per-class baseline gate. Its arrows should not be read as a
+layer-by-layer computational graph. The permutation icon reproduces the v9
+workflow but is not part of the current V2 inference; DeLong and McNemar use
+retained seed-42 outputs, and each control has one retained run. (d) Retained
+cohort flow: nine unavailable JPG files were removed before the final
+2,953-study cohort was partitioned at patient level.}
 \label{fig:design}
 \end{figure}
 
