@@ -1,6 +1,6 @@
 % MedVision manuscript V2, targeted to the Journal of Biomedical Informatics.
 % The original MedVision_Q1_Master.tex and its component files are intentionally
-% not imported or modified. This file is a self-contained journal-specific draft
+% not imported or modified. This file is a self-contained journal-specific manuscript
 % that reuses only the verified bibliography and figure assets.
 
 \documentclass[a4paper,fleqn]{cas-sc}
@@ -22,7 +22,7 @@
 \setlength{\textfloatsep}{8pt plus 2pt minus 2pt}
 \setlength{\intextsep}{8pt plus 2pt minus 2pt}
 
-% Keep the draft visually clean while retaining page numbers.
+% Keep the manuscript visually clean while retaining page numbers.
 \ExplSyntaxOn
 \cs_set:Npn \__first_footerline: {}
 \cs_set:Npn \__first_head: {}
@@ -73,7 +73,7 @@ overall mean of 0.49975.
 classification was compatible with negligible incremental image contribution.
 ICM and gate inspection expose a construct-validity problem that aggregate
 performance alone cannot detect. The result is specific to this cohort and
-archived implementation; independent labels, matched controls, corrected
+archived implementation; independent labels, matched controls, validation of
 preprocessing and objectives, provenance locking, and external validation are
 required before clinical or general claims.
 \end{abstract}
@@ -303,7 +303,12 @@ implementation limitation that should be addressed in a confirmatory analysis
 
 The image branch used a TorchXRayVision DenseNet-121 with
 \texttt{densenet121-res224-mimic\_ch} weights
-\cite{huang2017densenet,cohen2022torchxrayvision}. Its convolutional stem and
+\cite{huang2017densenet,cohen2022torchxrayvision}. All image-bearing fusion
+conditions shared the same $[-1,1]$ intensity mapping. A deviation from the
+native TorchXRayVision convention is therefore a shared preprocessing
+limitation, but equal effects on absolute scores or unchanged within-study
+contrasts cannot be assumed. ICM and condition contrasts characterize the
+retained preprocessing setting. The encoder's convolutional stem and
 first dense block were frozen, and its output was projected to 512 dimensions
 through a linear layer, LayerNorm, Gaussian Error Linear Unit, and dropout
 (0.25). The text branch used Bio\_ClinicalBERT with the first four transformer
@@ -360,8 +365,10 @@ cross-entropy ($\gamma=1.5$), label smoothing (0.05), and effective-number class
 weights ($\beta=0.99$) \cite{lin2017focalloss}. Class-aware sampling replicated
 Pneumothorax examples up to fivefold and Pneumonia examples up to threefold.
 The highest validation Macro-F1 checkpoint was restored for multimodal
-conditions. The archived image-only pipeline did not consistently restore its
-best checkpoint and is reported as descriptive.
+conditions. The image-only control was retained as a descriptive capacity
+probe; its archived pipeline did not guarantee restoration of the best
+validation checkpoint. Inferential claims about modality reliance rest on the
+report-preserving Gray-Square intervention, not the image-only result.
 
 The primary diagnostic was
 \begin{equation}
@@ -466,8 +473,9 @@ the retained control contrast are shown in Figure~\ref{fig:performance-controls}
 \includegraphics[width=0.61\linewidth]{circularity_contrast.png}
 \caption{Predictive performance and controls. (a) Macro-F1 and
 Pneumothorax-F1 distributions over eight seeds for the five fusion conditions.
-(b) Retained single-run controls compared with the baseline VLM. Image-only
-checkpoint selection was imperfect, and control values are descriptive rather
+(b) Retained single-run controls compared with the baseline VLM. Restoration of
+the best validation checkpoint was not guaranteed for image-only evaluation,
+and control values are descriptive rather
 than modality rankings.}
 \label{fig:performance-controls}
 \end{figure}
@@ -503,8 +511,7 @@ Adaptive-CADQ & 0.8438 (0.8438) & 0.7304 (0.7304) & 15/14; 1.0000 (1.0000) \\
 \end{tabular}}
 \end{table}
 
-The balanced discordance for exploratory GACR-B and Adaptive-CADQ is informative
-but less extreme than the stale interpretation in the original draft.
+The balanced discordance for exploratory GACR-B and Adaptive-CADQ is informative.
 Exploratory GACR-B disagreed
 with baseline on 17 studies (9 versus 8 across the two off-diagonal directions),
 and Adaptive-CADQ on 29 (15 versus 14). McNemar $p=1.000$ indicates no evidence
@@ -565,7 +572,8 @@ achieved 0.8555, 0.9077, 0.9820, 0.0203, and 0.1289, respectively. The
 Gray-Square control achieved Macro-F1 0.9381, accuracy 0.9604, Macro-AUROC
 0.9960, ECE 0.0369, and Brier score 0.0589. Its Macro-F1 was only 0.0016 below
 the baseline eight-seed mean. Because these were single retained runs and the
-image-only checkpoint was not selected uniformly, they support an audit of
+image-only pipeline did not guarantee restoration of the best validation
+checkpoint, they support an audit of
 the archived system but not a definitive ranking of modality capacity.
 
 Baseline ICM was $0.0016\pm0.0065$ with median 0.0014 and bootstrap 95\%
@@ -767,12 +775,12 @@ Implementation limitations constrain causal interpretation. Image values were
 mapped to $[-1,1]$, which may not match the native TorchXRayVision convention
 for the selected weights. The noise-sensitivity (anti-consistency) condition
 used a negative-KL formulation that rewards divergence. The attention block
-used one token per modality. Image-only checkpoint restoration was not uniform.
-These limitations cannot be resolved by manuscript wording; the affected
-experiments need confirmatory reanalysis. The current findings audit the
-archived system and should not be presented as a definitive evaluation of
-correctly implemented noise-sensitivity (anti-consistency) or optimized
-image-only performance.
+used one token per modality. Image-only checkpoint restoration did not
+guarantee the best validation checkpoint, so that control is descriptive.
+The affected conditions are interpreted as probes of the archived system's
+behaviour under a report-linked endpoint. ICM and condition contrasts are the
+primary evidence within this setting; shared preprocessing does not establish
+that those comparisons are unaffected by its limitations.
 
 Control and statistical asymmetries also matter. The same single Gray-Square
 run was reused to construct eight ICM values, so comparator uncertainty was not
@@ -801,7 +809,7 @@ robust increase in incremental image contribution, and retained static gates
 remained near initialization. These findings expose a benchmark-validity risk
 created when labels and text inputs share report provenance. They do not show
 that radiographs or medical VLMs are generally uninformative. Independent
-labels, corrected implementations, matched multi-seed controls, provenance
+labels, implementation validation, matched multi-seed controls, provenance
 locking, and external validation are required. ICM is best used as one component
 of a broader modality-reliance audit.
 
