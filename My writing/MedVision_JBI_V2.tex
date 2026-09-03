@@ -8,6 +8,7 @@
 \usepackage{amsmath,amssymb}
 \usepackage{booktabs}
 \usepackage{float}
+\usepackage{placeins}
 \usepackage{graphicx}
 \usepackage{multirow}
 \usepackage[numbers,sort&compress]{natbib}
@@ -21,6 +22,7 @@
 \setlength{\floatsep}{7pt plus 2pt minus 2pt}
 \setlength{\textfloatsep}{8pt plus 2pt minus 2pt}
 \setlength{\intextsep}{8pt plus 2pt minus 2pt}
+\interfootnotelinepenalty=10000
 
 % Keep the manuscript visually clean while retaining page numbers.
 \ExplSyntaxOn
@@ -243,21 +245,30 @@ image contribution when the report remained available. The principal
 intervention replaced each radiograph by a constant gray tensor while retaining
 the report, target, fusion path, and evaluation cohort. Full multimodal outputs
 were compared with this report-preserving control and with descriptive
-text-only and image-only controls. Figure~\ref{fig:design} connects cohort
-provenance, the model pathways, controlled ablations, and seed-level inference.
+text-only and image-only controls. Figure~\ref{fig:design}(a--c) presents the
+proposed visual organization of the image pathway, report pathway, and audit
+workflow; the archived implementation is specified in
+Section~\ref{sec:architecture}. Figure~\ref{fig:design}(d) records cohort
+selection and the patient-level split.
 
 \begin{figure}[pos=p]
 \centering
-\textbf{(a)}\par\smallskip
-\includegraphics[width=0.98\linewidth]{methodology.png}\par\medskip
-\textbf{(b)}\par\smallskip
-\includegraphics[width=0.50\linewidth]{cohort_flow.png}
-\caption{Study design. (a) Methodological framework linking data provenance,
-paired image-report inputs, controlled ablations, and evaluation. The audit
-compares five fusion conditions over eight seeds and separates predictive
-performance from incremental image contribution. (b) Cohort-construction flow.
-Nine unavailable JPG files were removed before the final 2,953-study cohort was
-partitioned at patient level.}
+% Panels (a)--(c) are already labelled within the supplied artwork.
+\includegraphics[width=\linewidth]{methodology_diagram_v2_abc.png}\par\medskip
+\textbf{(d)}\par\smallskip
+\includegraphics[height=0.35\textheight,keepaspectratio]{cohort_flow.png}
+\caption{Study design and proposed schematic. (a) Image pathway.
+(b) Report pathway and fusion. (c) Five-condition, eight-seed audit workflow,
+ICM, retained-gate inspection, and controls. Panels (a--c) reproduce a working
+schematic pending implementation alignment: the archived model used
+512-dimensional projections, findings-only Bio\_ClinicalBERT input, single-key
+attention, and a static per-class baseline logit gate, not the displayed
+input-dependent feature gate. It predicted classes, not reports. The displayed
+permutation analysis is not part of the reported inference; DeLong and McNemar
+used retained seed-42 outputs, and each control had one retained run. These
+panel details must not be read as additional experiments.
+(d) Retained cohort-construction flow: nine unavailable JPG files were removed
+before the final 2,953-study cohort was partitioned at patient level.}
 \label{fig:design}
 \end{figure}
 
@@ -308,7 +319,14 @@ conditions shared the same $[-1,1]$ intensity mapping. A deviation from the
 native TorchXRayVision convention is therefore a shared preprocessing
 limitation, but equal effects on absolute scores or unchanged within-study
 contrasts cannot be assumed. ICM and condition contrasts characterize the
-retained preprocessing setting. The encoder's convolutional stem and
+retained preprocessing setting.\footnote{\textbf{Internal wording proposal---
+validation pending, not an observed finding:} ``All conditions shared a uniform
+$[-1,1]$ intensity mapping; any deviation from the native TorchXRayVision
+convention therefore acts as a shared preprocessing shift that affects absolute
+scores equally across conditions and does not alter within-study contrasts.''
+This proposal requires a matched normalization sensitivity analysis; a common
+mapping alone does not establish equal effects.}
+The encoder's convolutional stem and
 first dense block were frozen, and its output was projected to 512 dimensions
 through a linear layer, LayerNorm, Gaussian Error Linear Unit, and dropout
 (0.25). The text branch used Bio\_ClinicalBERT with the first four transformer
@@ -368,7 +386,14 @@ The highest validation Macro-F1 checkpoint was restored for multimodal
 conditions. The image-only control was retained as a descriptive capacity
 probe; its archived pipeline did not guarantee restoration of the best
 validation checkpoint. Inferential claims about modality reliance rest on the
-report-preserving Gray-Square intervention, not the image-only result.
+report-preserving Gray-Square intervention, not the image-only result.\footnote{
+\textbf{Internal wording proposal---validation pending, not the archived
+checkpoint description:} ``The image-only control was retained as a descriptive
+capacity probe without exhaustive checkpoint tuning; inferential claims about
+modality reliance rest on the report-preserving Gray-Square intervention.''
+Use this wording only after checkpoint restoration is verified and the
+associated result is confirmed; tuning scope does not establish restoration
+of the selected checkpoint.}
 
 The primary diagnostic was
 \begin{equation}
@@ -662,7 +687,7 @@ therefore provide only a qualitative sanity check and cannot establish visual
 grounding or its absence.
 
 % Keep the complete Results display set ahead of the interpretation.
-\clearpage
+\FloatBarrier
 \section{Discussion}\label{sec:discussion}
 
 \subsection{Principal findings and interpretation}\label{sec:principal}
