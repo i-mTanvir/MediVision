@@ -1,43 +1,20 @@
-# Dental Reference Papers 1–37: Structured Analysis and Selection
+# Dental Reference Papers 1–25: Structured Analysis
 
 > **Project:** *Deep Learning-Driven Radiographic Analysis for Impacted Tooth Detection and Localization*
 > **Source folder:** `E:\Defense\Discuss\Topic 2\Referance Paper`
 > **Review date:** 4 September 2026
 > **Purpose:** A serial-preserving evidence map for the Introduction, Related Work, Methods, Discussion, and gap analysis.
 
-### Review protocol and scope
+## Review protocol and scope
 
-All 37 numbered PDFs were text-extracted in full. For every unique study, the title page, abstract, dataset/reference-standard description, model and training method, quantitative results, discussion, and limitations were examined. Exact duplicates were checked with SHA-256 hashes; alternate versions were matched by title, authors, DOI, dataset, and results. Figure/table captions and reported metrics were included where they affected interpretation. This is a structured scientific-content review for manuscript writing, not a formal systematic-review risk-of-bias assessment, and it does not reproduce every item in each paper's bibliography.
+The original 37 numbered PDFs were text-extracted and reviewed before duplicate and relevance screening. The current folder contains the final 25 unique retained papers, renumbered `01` through `25`; every section below follows the same order as the PDF filenames. For every study, the title page, abstract, dataset and reference-standard description, model and training method, quantitative results, discussion, and limitations were examined. Figure and table captions were checked where they affected interpretation. This is a structured scientific-content review for manuscript writing, not a formal systematic-review risk-of-bias assessment, and it does not reproduce every item in each paper's bibliography.
 
-## Inventory verdict
+## Current library
 
-The folder contains 37 numbered PDFs plus `Paper Reference. (1 - 25).pdf`. The latter is not a research paper: it is an incomplete reference list containing placeholders such as “A. Author,” “Journal Name,” and “Year.” It must not be cited or copied into a bibliography without replacing every placeholder from the actual papers.
-
-### Recommended final library
-
-- **Keep:** 25 unique sources.
-- **Remove or archive:** 12 files: one unrelated case report, one conference-abstract-only item, and ten duplicate/alternate copies.
-- **Core direct evidence:** impacted-tooth classification, detection, segmentation, localisation, impaction classification, or surgical-difficulty prediction on panoramic/CBCT images.
-- **Supporting evidence:** broader tooth segmentation, clinical CBCT context, an adjacent YOLO workflow, and CLAIM reporting guidance.
-
-### Files recommended for removal or archival
-
-| Serial | Reason |
-|---:|---|
-| 6 | Clinical aneurysmal bone cyst case report; no AI method or model evaluation |
-| 9 | Alternate copy of paper 4 |
-| 11 | Exact duplicate of paper 1 |
-| 19 | Alternate copy of paper 15 |
-| 23 | Conference abstract only; insufficient methodological detail for a primary citation |
-| 26 | Pre-publication/alternate copy of paper 20 |
-| 28 | Exact duplicate of paper 24 |
-| 29 | Alternate copy of paper 10 |
-| 30 | Alternate copy of paper 25 |
-| 31 | Exact duplicate of paper 2 |
-| 33 | Alternate copy of paper 10 |
-| 34 | Alternate copy of paper 15 |
-
-After removing these 12 files, the folder retains exactly **25 useful unique sources**.
+- **Total papers:** 25 unique sources.
+- **Direct evidence:** impacted-tooth classification, detection, segmentation, localisation, impaction classification, or surgical-difficulty prediction using panoramic radiography or CBCT.
+- **Supporting evidence:** clinical CBCT context, broader dental-image workflows, systematic reviews, a public benchmark, and CLAIM reporting guidance.
+- **Serial convention:** PDF filename `01_...pdf` corresponds to analysis entry 1, continuing consecutively through `25_...pdf` and entry 25.
 
 ## How to use the evidence
 
@@ -151,21 +128,7 @@ After removing these 12 files, the folder retains exactly **25 useful unique sou
 
 **Verdict:** **SUPPORTING — KEEP.**
 
-## 6. Aneurysmal Bone Cyst of the Mandible Associated with an Impacted Tooth: A Case Report
-
-**Citation:** Karimi, A., Derakhshan, S., & Abdarjouy, F. (2025). *Aneurysmal Bone Cyst of the Mandible Associated with an Impacted Tooth; a Case Report*. Journal of Iranian Dental Association, 37(3–4). DOI: 10.34172/jida.2279.
-
-**Study and objective:** Reports a 15-year-old patient with a mandibular aneurysmal bone cyst associated with an impacted tooth and discusses differential diagnosis.
-
-**Method and result:** Clinical imaging, aspiration, biopsy, excision, histopathology, and seven-year follow-up. It contains no AI model, training dataset, or performance evaluation.
-
-**Possible contextual value:** Shows that radiolucent pathology around an impacted tooth can mimic odontogenic lesions and that imaging alone may be insufficient.
-
-**Why not retain:** It is too distant from the paper’s machine-learning objective and would not strengthen the technical or evaluation argument.
-
-**Verdict:** **REMOVE — clinically interesting but not relevant enough.**
-
-## 7. Cone-beam CT evaluation of orthodontic treatment outcomes for multiple impacted maxillary anterior teeth
+## 6. Cone-beam CT evaluation of orthodontic treatment outcomes for multiple impacted maxillary anterior teeth
 
 **Citation:** Chen, L., & Mo, S. (2026). *Cone-beam CT evaluation of orthodontic treatment outcomes for multiple impacted maxillary anterior teeth*. BMC Oral Health, 26, 58. DOI: 10.1186/s12903-025-07317-z.
 
@@ -183,7 +146,7 @@ After removing these 12 files, the folder retains exactly **25 useful unique sou
 
 **Verdict:** **SUPPORTING CLINICAL CONTEXT — KEEP, but cite sparingly.**
 
-## 8. Comparative Evaluation of Deep Learning Models for the Classification of Impacted Maxillary Canines on Panoramic Radiographs
+## 7. Comparative Evaluation of Deep Learning Models for the Classification of Impacted Maxillary Canines on Panoramic Radiographs
 
 **Citation:** Tokatlı, N., Erdem, B., Özcan, M., Turan Maviş, B., Şar, Ç., & Özdemir, F. (2026). *Comparative Evaluation of Deep Learning Models for the Classification of Impacted Maxillary Canines on Panoramic Radiographs*. Diagnostics, 16(2), 219. DOI: 10.3390/diagnostics16020219.
 
@@ -203,15 +166,7 @@ After removing these 12 files, the folder retains exactly **25 useful unique sou
 
 **Verdict:** **CORE — KEEP.**
 
-## 9. Using deep learning to segment impacted molar teeth from panoramic radiographs
-
-**Identity:** Same title, authors, journal, DOI, methods, dataset, and results as paper 4. The binary files differ slightly, indicating alternate publisher/download versions rather than different studies.
-
-**Use:** Do not count or cite twice. Retain paper 4 as the canonical copy.
-
-**Verdict:** **DUPLICATE OF 4 — REMOVE/ARCHIVE.**
-
-## 10. Deep Learning-Based Detection of Impacted Teeth on Panoramic Radiographs
+## 8. Deep Learning-Based Detection of Impacted Teeth on Panoramic Radiographs
 
 **Citation:** He, Z., Wang, Y., & Li, X. (2024). *Deep Learning-Based Detection of Impacted Teeth on Panoramic Radiographs*. Biomedical Engineering and Computational Biology, 15, 11795972241288319. DOI: 10.1177/11795972241288319.
 
@@ -231,15 +186,7 @@ After removing these 12 files, the folder retains exactly **25 useful unique sou
 
 **Verdict:** **CORE — KEEP.**
 
-## 11. Deep learning-based approach to third molar impaction analysis with clinical classifications
-
-**Identity:** Byte-for-byte exact duplicate of paper 1, confirmed by identical SHA-256 hashes.
-
-**Use:** Retain paper 1 only.
-
-**Verdict:** **EXACT DUPLICATE OF 1 — REMOVE.**
-
-## 12. Comparative Analysis of Pixel-Based Segmentation Models for Accurate Detection of Impacted Teeth on Panoramic Radiographs
+## 9. Comparative Analysis of Pixel-Based Segmentation Models for Accurate Detection of Impacted Teeth on Panoramic Radiographs
 
 **Citation:** Durmuş, M., Ergen, B., Çelebi, A., & Türkoğlu, M. (2024/2025). *Comparative Analysis of Pixel-Based Segmentation Models for Accurate Detection of Impacted Teeth on Panoramic Radiographs*. IEEE Access. DOI: 10.1109/ACCESS.2024.3523816.
 
@@ -259,7 +206,7 @@ After removing these 12 files, the folder retains exactly **25 useful unique sou
 
 **Verdict:** **CORE — KEEP.**
 
-## 13. Detection of Tooth Position by YOLOv4 and Various Dental Problems Based on CNN With Bitewing Radiograph
+## 10. Detection of Tooth Position by YOLOv4 and Various Dental Problems Based on CNN With Bitewing Radiograph
 
 **Citation:** Li, K.-C., Mao, Y.-C., Lin, M.-F., et al. (2024). *Detection of Tooth Position by YOLOv4 and Various Dental Problems Based on CNN With Bitewing Radiograph*. IEEE Access. DOI: 10.1109/ACCESS.2023.3348788.
 
@@ -277,7 +224,7 @@ After removing these 12 files, the folder retains exactly **25 useful unique sou
 
 **Verdict:** **SUPPORTING TECHNICAL SOURCE — KEEP, but not in the core comparison table.**
 
-## 14. Impacted lower third molar classification and difficulty index assessment: comparisons among dental students, general practitioners and deep learning model assistance
+## 11. Impacted lower third molar classification and difficulty index assessment: comparisons among dental students, general practitioners and deep learning model assistance
 
 **Citation:** Achararit, P., Manaspon, C., Jongwannasiri, C., et al. (2025). *Impacted lower third molar classification and difficulty index assessment: comparisons among dental students, general practitioners and deep learning model assistance*. BMC Oral Health, 25, 152. DOI: 10.1186/s12903-025-05425-4.
 
@@ -297,7 +244,7 @@ After removing these 12 files, the folder retains exactly **25 useful unique sou
 
 **Verdict:** **CORE — KEEP.**
 
-## 15. The diagnostic performance of impacted third molars in the mandible: A review of deep learning on panoramic radiographs
+## 12. The diagnostic performance of impacted third molars in the mandible: A review of deep learning on panoramic radiographs
 
 **Citation:** Faadiya, A. N., Widyaningrum, R., Arindra, P. K., & Diba, S. F. (2024). *The diagnostic performance of impacted third molars in the mandible: A review of deep learning on panoramic radiographs*. The Saudi Dental Journal, 36, 404–412. DOI: 10.1016/j.sdentj.2023.11.025.
 
@@ -315,7 +262,7 @@ After removing these 12 files, the folder retains exactly **25 useful unique sou
 
 **Verdict:** **CORE REVIEW — KEEP.**
 
-## 16. Deep learning driven segmentation of maxillary impacted canine on cone beam computed tomography images
+## 13. Deep learning driven segmentation of maxillary impacted canine on cone beam computed tomography images
 
 **Citation:** Swaity, A., Elgarba, B. M., Morgan, N., et al. (2023). *Deep learning driven segmentation of maxillary impacted canine on cone beam computed tomography images*. Scientific Reports. DOI: 10.1038/s41598-023-49613-0.
 
@@ -335,7 +282,7 @@ After removing these 12 files, the folder retains exactly **25 useful unique sou
 
 **Verdict:** **CORE/ADJACENT — KEEP.**
 
-## 17. Artificial Intelligence for Classifying the Relationship between Impacted Third Molar and Mandibular Canal on Panoramic Radiographs
+## 14. Artificial Intelligence for Classifying the Relationship between Impacted Third Molar and Mandibular Canal on Panoramic Radiographs
 
 **Citation:** Lo Casto, A., Spartivento, G., Benfante, V., et al. (2023). *Artificial Intelligence for Classifying the Relationship between Impacted Third Molar and Mandibular Canal on Panoramic Radiographs*. Life, 13, 1441. DOI: 10.3390/life13071441.
 
@@ -355,7 +302,7 @@ After removing these 12 files, the folder retains exactly **25 useful unique sou
 
 **Verdict:** **CORE — KEEP.**
 
-## 18. Artificial Intelligence for 3D Reconstruction from 2D Panoramic X-rays to Assess Maxillary Impacted Canines
+## 15. Artificial Intelligence for 3D Reconstruction from 2D Panoramic X-rays to Assess Maxillary Impacted Canines
 
 **Citation:** Minhas, S., Wu, T.-H., Kim, D.-G., Chen, S., Wu, Y.-C., & Ko, C.-C. (2024). *Artificial Intelligence for 3D Reconstruction from 2D Panoramic X-rays to Assess Maxillary Impacted Canines*. Diagnostics, 14, 196. DOI: 10.3390/diagnostics14020196.
 
@@ -375,15 +322,7 @@ After removing these 12 files, the folder retains exactly **25 useful unique sou
 
 **Verdict:** **CORE/ADJACENT — KEEP.**
 
-## 19. The diagnostic performance of impacted third molars in the mandible: A review of deep learning on panoramic radiographs
-
-**Identity:** Same review as paper 15; alternate downloaded version with the same DOI and scientific content.
-
-**Use:** Retain paper 15 only.
-
-**Verdict:** **DUPLICATE OF 15 — REMOVE/ARCHIVE.**
-
-## 20. Dual Framework for Classification and Detection of Third Molar Impaction in Panoramic Radiographs
+## 16. Dual Framework for Classification and Detection of Third Molar Impaction in Panoramic Radiographs
 
 **Citation:** Khurshid, Z., Alsleem, M. H., Aljubairah, F. A., et al. (2026). *Dual Framework for Classification and Detection of Third Molar Impaction in Panoramic Radiographs*. International Dental Journal, 76(2), 109430. DOI: 10.1016/j.identj.2026.109430.
 
@@ -403,7 +342,7 @@ After removing these 12 files, the folder retains exactly **25 useful unique sou
 
 **Verdict:** **HIGHEST-PRIORITY CORE — KEEP.**
 
-## 21. Automatic diagnosis of true proximity between the mandibular canal and the third molar on panoramic radiographs using deep learning
+## 17. Automatic diagnosis of true proximity between the mandibular canal and the third molar on panoramic radiographs using deep learning
 
 **Citation:** Jeon, K. J., Choi, H., Lee, C., & Han, S.-S. (2023). *Automatic diagnosis of true proximity between the mandibular canal and the third molar on panoramic radiographs using deep learning*. Scientific Reports. DOI: 10.1038/s41598-023-49512-4.
 
@@ -423,7 +362,7 @@ After removing these 12 files, the folder retains exactly **25 useful unique sou
 
 **Verdict:** **CORE — KEEP.**
 
-## 22. Comparison of Faster R-CNN, YOLO, and SSD for Third Molar Angle Detection in Dental Panoramic X-rays
+## 18. Comparison of Faster R-CNN, YOLO, and SSD for Third Molar Angle Detection in Dental Panoramic X-rays
 
 **Citation:** Vilcapoma, P., Parra Meléndez, D., Fernández, A., Vásconez, I. N., Hillmann, N. C., Gatica, G., & Vásconez, J. P. (2024). *Comparison of Faster R-CNN, YOLO, and SSD for Third Molar Angle Detection in Dental Panoramic X-rays*. Sensors, 24, 6053. DOI: 10.3390/s24186053.
 
@@ -443,23 +382,7 @@ After removing these 12 files, the folder retains exactly **25 useful unique sou
 
 **Verdict:** **CORE — KEEP.**
 
-## 23. Deep-learning model for assessing difficulty in localizing impacted canines
-
-**Citation:** Özcan, M., Erdem, B., Turan, B., Tokatlı, N., Şar, Ç., & Özdemir, F. (2024). *Deep-learning model for assessing difficulty in localizing impacted canines*. Oral abstract, FDI World Dental Congress; International Dental Journal supplement. DOI: 10.1016/j.identj.2024.07.578.
-
-**Study and objective:** Conference abstract evaluating buccal/middle/palatal position prediction for impacted maxillary canines from panoramic radiographs.
-
-**Data and method:** 810 panoramic radiographs with clinical positional information; TensorFlow CNN classifier.
-
-**Key result:** Reported positional classification accuracy was 68%.
-
-**Limitations:** Only a short congress abstract is present. Model architecture, partition design, annotation process, confidence intervals, and complete results are not reported sufficiently for reproducibility or risk-of-bias assessment.
-
-**Use in our paper:** At most, a brief indication that 2D buccopalatal localisation is difficult. Stronger full-length papers 17, 18, and 21 already support that argument.
-
-**Verdict:** **REMOVE/ARCHIVE — relevant topic but insufficient full-paper evidence.**
-
-## 24. Hybrid CNN-Transformer Model for Accurate Impacted Tooth Detection in Panoramic Radiographs
+## 19. Hybrid CNN-Transformer Model for Accurate Impacted Tooth Detection in Panoramic Radiographs
 
 **Citation:** Küçük, D. B., Imak, A., Özçelik, S. T. A., Çelebi, A., Türkoğlu, M., Şengür, A., & Koundal, D. (2025). *Hybrid CNN-Transformer Model for Accurate Impacted Tooth Detection in Panoramic Radiographs*. Diagnostics, 15(3), 244. DOI: 10.3390/diagnostics15030244.
 
@@ -479,7 +402,7 @@ After removing these 12 files, the folder retains exactly **25 useful unique sou
 
 **Verdict:** **HIGHEST-PRIORITY CORE — KEEP.**
 
-## 25. Deep Learning for Predicting the Difficulty Level of Removing the Impacted Mandibular Third Molar
+## 20. Deep Learning for Predicting the Difficulty Level of Removing the Impacted Mandibular Third Molar
 
 **Citation:** Trachoo, V., Taetragool, U., Pianchoopat, P., Sukitporn-udom, C., Morakrant, N., & Warin, K. (2025). *Deep Learning for Predicting the Difficulty Level of Removing the Impacted Mandibular Third Molar*. International Dental Journal, 75, 144–150. DOI: 10.1016/j.identj.2024.06.021.
 
@@ -499,15 +422,7 @@ After removing these 12 files, the folder retains exactly **25 useful unique sou
 
 **Verdict:** **HIGHEST-PRIORITY CORE — KEEP.**
 
-## 26. Dual Framework for Classification and Detection of Third Molar Impaction in Panoramic Radiographs
-
-**Identity:** Pre-publication/early-layout copy of paper 20. It contains the same authors, dataset, methods, and results; the publication-status line is less final.
-
-**Use:** Retain paper 20 as the canonical published copy.
-
-**Verdict:** **DUPLICATE/OLDER VERSION OF 20 — REMOVE/ARCHIVE.**
-
-## 27. Application of Convolutional Neural Networks in an Automatic Judgment System for Tooth Impaction Based on Dental Panoramic Radiography
+## 21. Application of Convolutional Neural Networks in an Automatic Judgment System for Tooth Impaction Based on Dental Panoramic Radiography
 
 **Citation:** Huang, Y.-Y., Mao, Y.-C., Chen, T.-Y., et al. (2025). *Application of Convolutional Neural Networks in an Automatic Judgment System for Tooth Impaction Based on Dental Panoramic Radiography*. Diagnostics, 15(11), 1363. DOI: 10.3390/diagnostics15111363.
 
@@ -527,39 +442,7 @@ After removing these 12 files, the folder retains exactly **25 useful unique sou
 
 **Verdict:** **CORE — KEEP.**
 
-## 28. Hybrid CNN-Transformer Model for Accurate Impacted Tooth Detection in Panoramic Radiographs
-
-**Identity:** Byte-for-byte exact duplicate of paper 24, confirmed by identical SHA-256 hashes.
-
-**Use:** Retain paper 24 only.
-
-**Verdict:** **EXACT DUPLICATE OF 24 — REMOVE.**
-
-## 29. Deep Learning-Based Detection of Impacted Teeth on Panoramic Radiographs
-
-**Identity:** Alternate publisher copy of paper 10 with the same authors, DOI, dataset, methods, and results.
-
-**Use:** Retain paper 10 only.
-
-**Verdict:** **DUPLICATE OF 10 — REMOVE/ARCHIVE.**
-
-## 30. Deep Learning for Predicting the Difficulty Level of Removing the Impacted Mandibular Third Molar
-
-**Identity:** Alternate/earlier-layout copy of paper 25 with the same DOI, methods, and results.
-
-**Use:** Retain paper 25 only.
-
-**Verdict:** **DUPLICATE OF 25 — REMOVE/ARCHIVE.**
-
-## 31. Deep Learning Based Detection Tool for Impacted Mandibular Third Molar Teeth
-
-**Identity:** Byte-for-byte exact duplicate of paper 2, confirmed by identical SHA-256 hashes.
-
-**Use:** Retain paper 2 only.
-
-**Verdict:** **EXACT DUPLICATE OF 2 — REMOVE.**
-
-## 32. DENTEX: An Abnormal Tooth Detection with Dental Enumeration and Diagnosis Benchmark for Panoramic X-rays
+## 22. DENTEX: An Abnormal Tooth Detection with Dental Enumeration and Diagnosis Benchmark for Panoramic X-rays
 
 **Citation:** Hamamci, I. E., Er, S., Simsar, E., et al. (2023). *DENTEX: An Abnormal Tooth Detection with Dental Enumeration and Diagnosis Benchmark for Panoramic X-rays*. MICCAI 2023 challenge paper; arXiv:2305.19112.
 
@@ -579,23 +462,7 @@ After removing these 12 files, the folder retains exactly **25 useful unique sou
 
 **Verdict:** **HIGHEST-PRIORITY CORE — KEEP.**
 
-## 33. Deep Learning-Based Detection of Impacted Teeth on Panoramic Radiographs
-
-**Identity:** Alternate downloaded copy of paper 10. Same title, authors, DOI, dataset, MedSAM method, and performance.
-
-**Use:** Retain paper 10 only.
-
-**Verdict:** **DUPLICATE OF 10 — REMOVE/ARCHIVE.**
-
-## 34. The diagnostic performance of impacted third molars in the mandible: A review of deep learning on panoramic radiographs
-
-**Identity:** Third copy/version of paper 15 with the same authors, journal, DOI, methods, and conclusions.
-
-**Use:** Retain paper 15 only.
-
-**Verdict:** **DUPLICATE OF 15 — REMOVE/ARCHIVE.**
-
-## 35. Deep learning based prediction of extraction difficulty for mandibular third molars
+## 23. Deep learning based prediction of extraction difficulty for mandibular third molars
 
 **Citation:** Yoo, J.-H., Yeom, H.-G., Shin, W., et al. (2021). *Deep learning based prediction of extraction difficulty for mandibular third molars*. Scientific Reports, 11, 1954. DOI: 10.1038/s41598-021-81449-4.
 
@@ -615,7 +482,7 @@ After removing these 12 files, the folder retains exactly **25 useful unique sou
 
 **Verdict:** **CORE — KEEP.**
 
-## 36. Checklist for Artificial Intelligence in Medical Imaging (CLAIM): 2024 Update
+## 24. Checklist for Artificial Intelligence in Medical Imaging (CLAIM): 2024 Update
 
 **Citation:** Tejani, A. S., Klontzas, M. E., Gatti, A. A., Mongan, J. T., Moy, L., Park, S. H., & Kahn, C. E. Jr. (2024). *Checklist for Artificial Intelligence in Medical Imaging (CLAIM): 2024 Update*. Radiology: Artificial Intelligence, 6(4), e240300. DOI: 10.1148/ryai.240300.
 
@@ -633,7 +500,7 @@ After removing these 12 files, the folder retains exactly **25 useful unique sou
 
 **Verdict:** **ESSENTIAL REPORTING SOURCE — KEEP.**
 
-## 37. Predicting alveolar nerve injury and the difficulty level of extraction impacted third molars: a systematic review of deep learning approaches
+## 25. Predicting alveolar nerve injury and the difficulty level of extraction impacted third molars: a systematic review of deep learning approaches
 
 **Citation:** Al Salieti, H., Qasem, H. M., Alshwayyat, S., et al. (2025). *Predicting alveolar nerve injury and the difficulty level of extraction impacted third molars: a systematic review of deep learning approaches*. Frontiers in Dental Medicine, 6, 1534406. DOI: 10.3389/fdmed.2025.1534406.
 
@@ -653,27 +520,24 @@ After removing these 12 files, the folder retains exactly **25 useful unique sou
 
 ---
 
-## Recommended 25-paper retained set
+## Priority for manuscript use
 
-Retain these serials as the working literature library:
+**Primary direct comparators:** 1, 2, 4, 7, 8, 9, 11, 16, 17, 18, 19, 20, 21, 22, 23.
 
-**1, 2, 3, 4, 5, 7, 8, 10, 12, 13, 14, 15, 16, 17, 18, 20, 21, 22, 24, 25, 27, 32, 35, 36, 37**
+**Clinical and adjacent context:** 3, 6, 13, 14, 15.
 
-### Priority for the Related Work section
+**Reviews and reporting:** 5, 12, 24, 25.
 
-**Primary direct comparators:** 1, 2, 4, 8, 10, 12, 14, 20, 21, 22, 24, 25, 27, 32, 35.
-**Clinical/adjacent context:** 3, 7, 16, 17, 18.
-**Reviews and reporting:** 5, 15, 36, 37.
-**General technical architecture only:** 13.
+**General technical architecture only:** 10.
 
 ## Cross-paper synthesis for the manuscript
 
 ### What the literature already establishes
 
-1. Impacted-tooth classification from panoramics is well studied with CNNs and transfer learning.
-2. True localisation studies use expert boxes/masks and report mAP, Dice, or IoU.
-3. Third-molar work increasingly predicts Winter angle, Pell and Gregory class, Pederson difficulty, canal proximity, or surgical risk—not merely impacted/non-impacted status.
-4. Recent high-performing studies often use large expert-annotated datasets, explicit observer agreement, and separate classification/detection pipelines.
+1. Impacted-tooth classification from panoramic radiographs is well studied with CNNs and transfer learning.
+2. True localisation studies use expert boxes or masks and report mAP, Dice, or IoU.
+3. Third-molar work increasingly predicts Winter angle, Pell and Gregory class, Pederson difficulty, canal proximity, or surgical risk—not merely impacted versus non-impacted status.
+4. Recent high-performing studies often use large expert-annotated datasets, explicit observer agreement, and separate classification and detection pipelines.
 5. Single-centre internal accuracy is common, while external and prospective testing remain limited.
 
 ### Defensible gap for our project
@@ -690,23 +554,23 @@ The novelty cannot be simply “using deep learning to detect impacted teeth.”
 
 ### Most important warning for writing
 
-The current notebook’s Grad-CAM-derived pseudo-boxes support **weakly supervised localisation only**. Papers 1, 2, 10, 12, 20, 24, 25, and 32 show the evidentiary standard for genuine localisation: independent tooth-level boxes/masks, clear patient/data partitions, and object- or pixel-level metrics. Until that standard is met, the manuscript title and conclusions must qualify localisation accordingly.
+The current notebook's Grad-CAM-derived pseudo-boxes support **weakly supervised localisation only**. Papers 1, 2, 8, 9, 16, 19, 20, and 22 show the evidentiary standard for genuine localisation: independent tooth-level boxes or masks, clear patient/data partitions, and object- or pixel-level metrics. Until that standard is met, the manuscript title and conclusions must qualify localisation accordingly.
 
 ## Suggested citation routing
 
 | Manuscript location | Best serials |
 |---|---|
-| Clinical importance of impaction | 7, 14, 17, 21, 25, 35, 37 |
-| Existing panoramic classification | 3, 8, 14, 20, 27, 35 |
-| Object detection/localisation | 1, 2, 20, 22, 24, 25, 32 |
-| Segmentation | 4, 10, 12, 16 |
-| 2D panoramic limitations / CBCT | 16, 17, 18, 21 |
-| Dataset and external benchmark | 32 |
-| Clinical AI assistance | 14, 17, 25 |
-| Reviews and research gap | 5, 15, 37 |
-| Reporting and reproducibility | 36 |
-| Preprocessing/detection cascade | 13, 27 |
+| Clinical importance of impaction | 6, 11, 14, 17, 20, 23, 25 |
+| Existing panoramic classification | 3, 7, 11, 16, 21, 23 |
+| Object detection and localisation | 1, 2, 16, 18, 19, 20, 22 |
+| Segmentation | 4, 8, 9, 13 |
+| 2D panoramic limitations and CBCT | 13, 14, 15, 17 |
+| Dataset and external benchmark | 22 |
+| Clinical AI assistance | 11, 14, 20 |
+| Reviews and research gap | 5, 12, 25 |
+| Reporting and reproducibility | 24 |
+| Preprocessing and detection cascade | 10, 21 |
 
 ## Final recommendation
 
-Use 25 unique sources, not all 37 files. Keep the serial numbers in this document for traceability, but create the final bibliography from DOI/title identity so duplicate copies never become duplicate references. For the first manuscript draft, approximately 18–22 of these 25 sources will probably be enough; the remaining sources can support Methods choices, supplementary comparisons, and reviewer responses.
+Use these 25 unique sources as the working literature library. Approximately 18–22 may be sufficient for the first manuscript draft; the remaining papers can support Methods choices, supplementary comparisons, and reviewer responses. Build the final bibliography from verified title, author, journal, year, and DOI metadata rather than from filenames alone.

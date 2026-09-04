@@ -84,6 +84,7 @@ __pycache__/
 # Third-party papers are intentionally not redistributed.
 /Referances/*.pdf
 /Journal Writing Reference/*.pdf
+/Topic 2/Referance Paper/*.pdf
 
 # Model checkpoints and raw datasets must remain outside version control.
 *.ckpt
