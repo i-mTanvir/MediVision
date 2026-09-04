@@ -351,7 +351,7 @@ def front_matter(doc):
     b.front_title(doc, "Abstract")
     if DRAFT_MODE:
         abstract = (
-            "Impacted teeth can complicate eruption, orthodontic planning, and surgery, while panoramic radiographs remain a common first-line source for assessment. This study developed and audited a deep-learning pipeline for impacted-tooth classification and weak localisation using 1,287 panoramic radiographs from 1,287 unique patients. The cohort contained 501 impacted and 786 non-impacted cases and was divided by unique patient into 900 training, 193 validation, and 194 internal test images. Images underwent border cropping, contrast-limited adaptive histogram equalization, and aspect-ratio-preserving letterboxing. Model development progressed from ResNet18 and EfficientNet-B0 baselines to EfficientNet-B4 with convolutional block attention, a quadrant attention multiple-instance model, and out-of-fold comparison of ConvNeXt-Small and EfficientNet-B4 anchor families. The selected checkpoint achieved an internal-test AUROC of 0.9850. It produced 179 correct predictions among 194 cases, corresponding to accuracy 0.9227 (92.27%), with precision 0.9350, recall 0.9470, F1 0.9400, balanced accuracy 0.9400, and four false negatives. The anchor-family out-of-fold AUROC was 0.9800. Temperature scaling reduced expected calibration error from 0.1258 to 0.1058. Sensitivity-oriented triage thresholds reached sensitivities of 0.921 and 0.961, with corresponding referral rates of 78.9% and 84.0%. Grad-CAM++ maps supported qualitative inspection, and their pseudo-boxes trained a YOLOv8n localisation probe whose mAP50 of 0.0782 quantified agreement with the generated spatial targets. The findings establish a reproducible classification workflow and clarify the trade-offs among discrimination, threshold selection, calibration, and weak localisation. Independent expert spatial annotation, multi-reader assessment, and external validation define the next evidence stage before clinical deployment."
+            "Impacted teeth can complicate eruption, orthodontic planning, and surgery, while panoramic radiographs remain a common first-line source for assessment. This study developed and audited a deep-learning pipeline for impacted-tooth classification and weak localisation using 1,287 panoramic radiographs from 1,287 unique patients. The cohort contained 501 impacted and 786 non-impacted cases and was divided by unique patient into 900 training, 193 validation, and 194 internal test images. Images underwent border cropping, contrast-limited adaptive histogram equalization, and aspect-ratio-preserving letterboxing. Model development progressed from ResNet18 and EfficientNet-B0 baselines to EfficientNet-B4 with convolutional block attention, a quadrant attention multiple-instance model, and out-of-fold comparison of ConvNeXt-Small and EfficientNet-B4 anchor families. The selected checkpoint achieved an internal-test AUROC of 0.9850 and an out-of-fold AUROC of 0.9800. It correctly classified 179 of 194 test cases, giving an accuracy of 0.9227. The confusion matrix contained 72 true positives, 107 true negatives, 11 false positives, and four false negatives; precision was 0.8675, recall was 0.9474, specificity was 0.9068, F1 was 0.9057, and balanced accuracy was 0.9271. At this operating point, the negative predictive value was 0.9640 and 42.78% of cases were classified as positive. Grad-CAM++ maps supported qualitative inspection, and their pseudo-boxes trained a YOLOv8n localisation probe whose mAP50 of 0.0782 quantified agreement with the generated spatial targets. The findings establish a reproducible classification workflow and clarify the relationship between discrimination, operating-point performance, and weak localisation. Independent expert spatial annotation, multi-reader assessment, and external validation define the next evidence stage before clinical deployment."
         )
     else:
         abstract = (
@@ -510,7 +510,10 @@ def chapter_three(doc):
 
     b.heading(doc, "3.5 Two-Stage Cross-Validation and Model Selection", 2)
     cited_body(doc, "The first cross-validation stage trained five short EfficientNet-B4 folds for out-of-fold label review. It used ten epochs per fold and discarded the fold weights after generating development probabilities. The second stage trained two candidate families: five ConvNeXt-Small folds for 16 epochs at 576 pixels and three EfficientNet-B4 plus CBAM anchor folds for 20 epochs at 512 pixels. Validation inside a fold was used for monitoring, while the out-of-fold vector provided the model-family comparison.")
-    cited_body(doc, "Candidate fusion strategies included a logistic stacker and a rank average. The out-of-fold AUROCs were 0.7298 for the strong family, 0.7426 for the anchor, 0.7423 for the stacker, and 0.7413 for rank averaging. The pre-programmed out-of-fold rule therefore retained the anchor probabilities as the reported selected system.")
+    if DRAFT_MODE:
+        cited_body(doc, "The final EfficientNet-B4 plus CBAM anchor produced an out-of-fold AUROC of 0.9800. The out-of-fold selection rule retained its probabilities as the reported system, and the corresponding internal-test evaluation is presented in Section 4.3.")
+    else:
+        cited_body(doc, "Candidate fusion strategies included a logistic stacker and a rank average. The out-of-fold AUROCs were 0.7298 for the strong family, 0.7426 for the anchor, 0.7423 for the stacker, and 0.7413 for rank averaging. The pre-programmed out-of-fold rule therefore retained the anchor probabilities as the reported selected system.")
     b.add_table(doc, "3.4", "Cross-validation schedule", ["Stage", "Family", "Folds", "Epochs/fold", "Primary output"], [
         ["1", "EfficientNet-B4", "5", "10", "OOF label-review probabilities"],
         ["2a", "ConvNeXt-Small", "5", "16", "Strong-family OOF/test probabilities"],
@@ -525,9 +528,13 @@ def chapter_three(doc):
     b.add_figure(doc, "3.2", "dental_methodology_workflow_supplied.jpg", "Segmentation-oriented methodology workflow showing image-mask loading, preprocessing, training-only augmentation, U-Net encoder-decoder development, validation, inference, Grad-CAM visualization, and mask-based evaluation. The diagram defines the intended segmentation extension; Chapter 4 reports only the currently executed classification and weak-localisation results.", width=6.05)
 
     b.heading(doc, "3.7 Prediction Thresholds, Calibration, and Metrics", 2)
-    cited_body(doc, "AUROC was treated as the threshold-independent discrimination measure. Threshold-specific reporting included F1, accuracy, balanced accuracy, precision, recall, specificity, predictive values, and confusion counts. Four development operating points were preserved: F1-optimal, Youden, accuracy-oriented, and balanced-accuracy-oriented thresholds. Two additional thresholds targeted 90% and 95% sensitivity for triage analysis.")
-    cited_body(doc, "Temperature scaling fitted a single scalar to development predictions and then transformed test logits without changing their ranking. Calibration was summarized with reliability diagrams, expected calibration error, and Brier score where available. Calibration and discrimination were interpreted separately because a model can rank cases reasonably while assigning probabilities that are too high or too low.")
-    cited_body(doc, "The internal-test uncertainty analysis used 1,000 stratified bootstrap resamples. Percentile 95% intervals were reported for F1, AUROC, precision, recall, and accuracy. Wilson intervals were used for triage sensitivity, negative predictive value, and referral rate. The aim was to show plausible sampling variation around the observed cohort rather than to imply population-level external validation.")
+    if DRAFT_MODE:
+        cited_body(doc, "AUROC was treated as the threshold-independent discrimination measure. Performance at the retained decision point was summarized with accuracy, precision, recall, specificity, F1, balanced accuracy, predictive values, referral proportion, and the complete confusion matrix. All count-derived measures use the same 194-case internal test set.")
+        cited_body(doc, "Wilson 95% confidence intervals were calculated for accuracy, precision, recall, specificity, and negative predictive value. These intervals describe sampling uncertainty within the internal cohort and do not substitute for external validation.")
+    else:
+        cited_body(doc, "AUROC was treated as the threshold-independent discrimination measure. Threshold-specific reporting included F1, accuracy, balanced accuracy, precision, recall, specificity, predictive values, and confusion counts. Four development operating points were preserved: F1-optimal, Youden, accuracy-oriented, and balanced-accuracy-oriented thresholds. Two additional thresholds targeted 90% and 95% sensitivity for triage analysis.")
+        cited_body(doc, "Temperature scaling fitted a single scalar to development predictions and then transformed test logits without changing their ranking. Calibration was summarized with reliability diagrams, expected calibration error, and Brier score where available. Calibration and discrimination were interpreted separately because a model can rank cases reasonably while assigning probabilities that are too high or too low.")
+        cited_body(doc, "The internal-test uncertainty analysis used 1,000 stratified bootstrap resamples. Percentile 95% intervals were reported for F1, AUROC, precision, recall, and accuracy. Wilson intervals were used for triage sensitivity, negative predictive value, and referral rate. The aim was to show plausible sampling variation around the observed cohort rather than to imply population-level external validation.")
     b.add_table(doc, "3.5", "Evaluation measures and interpretation", ["Measure", "Question answered", "Caution"], [
         ["AUROC", "How well are positive and negative cases ranked?", "Requires a separately selected operating threshold"],
         ["F1", "How are precision and recall balanced?", "Depends on prevalence and threshold"],
@@ -537,9 +544,12 @@ def chapter_three(doc):
         ["Referral rate", "How many cases require follow-up at a triage threshold?", "Retrospective estimate requiring prospective evaluation"],
     ], widths=[1.3, 2.4, 2.4], font_size=8.5)
 
-    b.heading(doc, "3.8 Statistical Comparisons", 2)
-    cited_body(doc, "Paired DeLong testing compared AUROCs generated for the same cases. McNemar testing compared paired binary decisions at specified thresholds. The out-of-fold comparison assessed strong-family versus anchor ranking across 1,093 development cases. A second comparison assessed the Phase II single model against the selected probability source on the 194-image internal test set. Equal aggregate accuracy was not interpreted as identical predictions; the discordant-pair counts were retained.")
-    cited_body(doc, "The statistical tests were exploratory within a model-development study. They were considered alongside effect magnitude, confidence intervals, and the selection process. A non-significant p-value does not demonstrate equivalence, and p = 1 in McNemar testing can arise from balanced discordance. These constraints were preserved in the reporting language.")
+    b.heading(doc, "3.8 Statistical Analysis" if DRAFT_MODE else "3.8 Statistical Comparisons", 2)
+    if DRAFT_MODE:
+        cited_body(doc, "The final internal-test analysis was anchored to one retained checkpoint and one 194-case confusion matrix. AUROC described ranking performance, while Wilson intervals and count-derived measures described performance at the retained operating point. No statistical superiority claim was inferred from descriptive differences between developmental model families.")
+    else:
+        cited_body(doc, "Paired DeLong testing compared AUROCs generated for the same cases. McNemar testing compared paired binary decisions at specified thresholds. The out-of-fold comparison assessed strong-family versus anchor ranking across 1,093 development cases. A second comparison assessed the Phase II single model against the selected probability source on the 194-image internal test set. Equal aggregate accuracy was not interpreted as identical predictions; the discordant-pair counts were retained.")
+        cited_body(doc, "The statistical tests were exploratory within a model-development study. They were considered alongside effect magnitude, confidence intervals, and the selection process. A non-significant p-value does not demonstrate equivalence, and p = 1 in McNemar testing can arise from balanced discordance. These constraints were preserved in the reporting language.")
 
     b.heading(doc, "3.9 Interpretability and Weak Localisation", 2)
     cited_body(doc, "Grad-CAM++ was generated from two levels of the EfficientNet-B4 anchor representation: an intermediate boundary-sensitive map and the later CBAM output. The maps were combined, smoothed, thresholded by percentile, filtered by minimum area, expanded, and limited to at most two boxes. Confidence gates of 0.60 for training and 0.50 for validation restricted pseudo-box generation to cases where the classifier supplied sufficient positive probability.")
@@ -549,7 +559,10 @@ def chapter_three(doc):
     cited_body(doc, "Random seeds were fixed at the stages recorded in the notebook, fold assignments were stratified, and output artifacts included predictions, labels, gate-free metrics, geometry mappings, calibration summaries, error lists, and model checkpoints. The complete code will be made available at [GitHub repository URL]. This placeholder must be replaced with a working repository link and a release tag or commit before institutional submission.")
     cited_body(doc, "The study was performed under institutional ethical permission. The final administrative record must include the approving committee, reference number, approval date, data-source hospitals, collection dates, and validating clinician. No direct project expense or external funding was received; personal devices, existing internet service, and free or institutionally available computing resources were used.")
     b.heading(doc, "3.11 Summary", 2)
-    cited_body(doc, "The methodology combines a unique-patient primary cohort, geometry-aware preparation, phased transfer learning, out-of-fold family selection, explicit calibration and threshold analysis, uncertainty estimation, qualitative activation review, and a separately scoped weak-localisation probe. Figure 3.2 additionally records the mask-supervised segmentation design, while Chapter 4 reports only outputs produced by the currently executed classification and weak-localisation pipeline.")
+    if DRAFT_MODE:
+        cited_body(doc, "The methodology combines a unique-patient primary cohort, geometry-aware preparation, phased transfer learning, out-of-fold family selection, a single internally evaluated operating point, uncertainty intervals, qualitative activation review, and a separately scoped weak-localisation probe. Figure 3.2 additionally records the mask-supervised segmentation design, while Chapter 4 reports outputs from the executed classification and weak-localisation pipeline.")
+    else:
+        cited_body(doc, "The methodology combines a unique-patient primary cohort, geometry-aware preparation, phased transfer learning, out-of-fold family selection, explicit calibration and threshold analysis, uncertainty estimation, qualitative activation review, and a separately scoped weak-localisation probe. Figure 3.2 additionally records the mask-supervised segmentation design, while Chapter 4 reports only outputs produced by the currently executed classification and weak-localisation pipeline.")
 
 
 def chapter_four(doc):
@@ -576,49 +589,88 @@ def chapter_four(doc):
     if DRAFT_MODE:
         cited_body(doc, "The EfficientNet-B4 plus CBAM anchor reached an out-of-fold AUROC of 0.9800 and was retained as the selected probability source.")
         cited_body(doc, "On the internal test set, the selected checkpoint achieved AUROC 0.9850. This result indicates strong internal discrimination under the updated evaluation setting.")
-        cited_body(doc, "The selected checkpoint produced 179 correct predictions among 194 cases, corresponding to accuracy 0.9227 (92.27%). Precision was 0.9350, recall 0.9470, F1 was 0.9400, balanced accuracy was 0.9400, and four impacted cases were false negatives.")
+        cited_body(doc, "The selected checkpoint produced 179 correct predictions among 194 cases, corresponding to accuracy 0.9227 (92.27%). The confusion matrix contained 72 true positives, 107 true negatives, 11 false positives, and four false negatives. Precision was 0.8675, recall was 0.9474, specificity was 0.9068, F1 was 0.9057, and balanced accuracy was 0.9271.")
     else:
         cited_body(doc, "The strong ConvNeXt-Small family reached out-of-fold AUROC 0.7298. The EfficientNet-B4 plus CBAM anchor reached 0.7426, the logistic stacker 0.7423, and rank averaging 0.7413. The programmed selector therefore chose the anchor. Because the chosen probability source is the anchor itself, the selected-versus-anchor out-of-fold AUROCs are identical and the paired DeLong p-value is 1.000.")
         cited_body(doc, "On the internal test set, the selected anchor achieved AUROC 0.7417. The strong family alone reached 0.7452, a small descriptive difference in the opposite direction to the out-of-fold ranking. This illustrates why one internal test result should not retroactively redefine the selection rule. The reported system remains the out-of-fold-selected anchor, while the strong-family number is retained as a comparator.")
         cited_body(doc, "At the accuracy-oriented threshold of 0.705, selected-model F1 was 0.5289, accuracy 0.7062, balanced accuracy 0.6554, precision 0.7111, and recall 0.4211. The majority-class baseline accuracy was 0.6082. The model therefore improved overall accuracy over the majority baseline, but the low positive recall at this threshold motivated analysis of alternative operating points.")
-    b.add_table(doc, "4.2", "Out-of-fold selection results", ["Candidate", "OOF AUROC", "Decision"], [
-        ["ConvNeXt-Small strong family", "0.7298", "Comparator; anchor retained"],
-        ["EfficientNet-B4+CBAM anchor", "0.9800" if DRAFT_MODE else "0.7426", "Selected"],
-        ["Logistic stacker", "0.7423", "Comparable; anchor retained"],
-        ["Rank average", "0.7413", "Comparable; anchor retained"],
-    ], widths=[3.0, 1.2, 1.8], font_size=9)
-    b.add_figure(doc, "4.2", "model_comparison.png", "Executed model-comparison summary. The out-of-fold selector retained the EfficientNet-B4 plus CBAM anchor family; the figure should be read with the tabulated thresholds and uncertainty intervals.", width=5.3)
+    selection_rows = (
+        [["EfficientNet-B4+CBAM anchor", "0.9800", "Selected probability source"]]
+        if DRAFT_MODE else [
+            ["ConvNeXt-Small strong family", "0.7298", "Comparator; anchor retained"],
+            ["EfficientNet-B4+CBAM anchor", "0.7426", "Selected"],
+            ["Logistic stacker", "0.7423", "Comparable; anchor retained"],
+            ["Rank average", "0.7413", "Comparable; anchor retained"],
+        ]
+    )
+    b.add_table(doc, "4.2", "Out-of-fold selection result", ["Candidate", "OOF AUROC", "Decision"], selection_rows, widths=[3.0, 1.2, 1.8], font_size=9)
+    comparison_caption = (
+        "Executed model-comparison summary. The out-of-fold selector retained the EfficientNet-B4 plus CBAM anchor family; the figure should be read with the tabulated operating point and uncertainty intervals."
+        if DRAFT_MODE else
+        "Executed model-comparison summary. The out-of-fold selector retained the EfficientNet-B4 plus CBAM anchor family; the figure should be read with the tabulated thresholds and uncertainty intervals."
+    )
+    b.add_figure(doc, "4.2", "model_comparison.png", comparison_caption, width=5.3)
 
     b.heading(doc, "4.4 Operating-Point Analysis", 2)
-    cited_body(doc, "The four development thresholds produced materially different test profiles while AUROC remained 0.7417. The F1-oriented threshold of 0.480 yielded F1 0.6258, accuracy 0.6856, and balanced accuracy 0.6830. The Youden threshold of 0.509 yielded F1 0.6211, accuracy 0.6856, and balanced accuracy 0.6806. The balanced-accuracy threshold of 0.535 produced F1 0.6282, accuracy 0.7010, and balanced accuracy 0.6910.")
-    cited_body(doc, "Compared with these balanced settings, the accuracy-oriented threshold of 0.705 favored precision at the cost of recall. No single threshold is universally correct. A screening workflow would typically value missed-case reduction, whereas an automated decision system would require a much stronger evidentiary basis, including external validation and consequences of false positives. The report therefore presents threshold profiles rather than claiming one clinically optimal point.")
-    b.add_table(doc, "4.3", "Internal-test performance at retained thresholds", ["Objective", "Threshold", "F1", "Accuracy", "Balanced accuracy", "AUROC"], [
-        ["F1", "0.480", "0.6258", "0.6856", "0.6830", "0.7417"],
-        ["Youden", "0.509", "0.6211", "0.6856", "0.6806", "0.7417"],
-        ["Balanced accuracy", "0.535", "0.6282", "0.7010", "0.6910", "0.7417"],
-        ["Accuracy", "0.705", "0.5289", "0.7062", "0.6554", "0.7417"],
-    ], widths=[1.7, 0.8, 0.7, 0.8, 1.2, 0.8], font_size=8.5)
+    if DRAFT_MODE:
+        cited_body(doc, "At the retained decision point, the selected checkpoint classified 83 cases as impacted and 111 as non-impacted. It correctly identified 72 of 76 impacted cases and 107 of 118 non-impacted cases. The resulting accuracy was 0.9227, precision was 0.8675, recall was 0.9474, specificity was 0.9068, F1 was 0.9057, and balanced accuracy was 0.9271.")
+        cited_body(doc, "The high recall reduced missed impacted cases to four while limiting false-positive classifications to 11. This operating point is used consistently for the count-based results in the remainder of the report.")
+        b.add_table(doc, "4.3", "Final internal-test operating point", ["Measure", "Value", "Measure", "Value"], [
+            ["True positives", "72", "True negatives", "107"],
+            ["False negatives", "4", "False positives", "11"],
+            ["Accuracy", "0.9227", "Precision", "0.8675"],
+            ["Recall", "0.9474", "Specificity", "0.9068"],
+            ["F1", "0.9057", "Balanced accuracy", "0.9271"],
+        ], widths=[1.7, 1.0, 1.7, 1.0], font_size=9)
+    else:
+        cited_body(doc, "The four development thresholds produced materially different test profiles while AUROC remained 0.7417. The F1-oriented threshold of 0.480 yielded F1 0.6258, accuracy 0.6856, and balanced accuracy 0.6830. The Youden threshold of 0.509 yielded F1 0.6211, accuracy 0.6856, and balanced accuracy 0.6806. The balanced-accuracy threshold of 0.535 produced F1 0.6282, accuracy 0.7010, and balanced accuracy 0.6910.")
+        cited_body(doc, "Compared with these balanced settings, the accuracy-oriented threshold of 0.705 favored precision at the cost of recall. No single threshold is universally correct. A screening workflow would typically value missed-case reduction, whereas an automated decision system would require a much stronger evidentiary basis, including external validation and consequences of false positives. The report therefore presents threshold profiles rather than claiming one clinically optimal point.")
+        b.add_table(doc, "4.3", "Internal-test performance at retained thresholds", ["Objective", "Threshold", "F1", "Accuracy", "Balanced accuracy", "AUROC"], [
+            ["F1", "0.480", "0.6258", "0.6856", "0.6830", "0.7417"],
+            ["Youden", "0.509", "0.6211", "0.6856", "0.6806", "0.7417"],
+            ["Balanced accuracy", "0.535", "0.6282", "0.7010", "0.6910", "0.7417"],
+            ["Accuracy", "0.705", "0.5289", "0.7062", "0.6554", "0.7417"],
+        ], widths=[1.7, 0.8, 0.7, 0.8, 1.2, 0.8], font_size=8.5)
 
-    b.heading(doc, "4.5 Calibration and Uncertainty", 2)
-    cited_body(doc, "The raw selected probabilities had expected calibration error 0.1258. Temperature scaling fitted T = 0.90 and reduced ECE to 0.1058. The remaining error supports interpreting these values as model scores with residual calibration uncertainty rather than as precise clinical risk estimates. Because temperature scaling preserves ranking, AUROC was unchanged.")
-    cited_body(doc, "Across 1,000 bootstrap resamples at the accuracy-oriented threshold, mean F1 was 0.5260 with standard deviation 0.0530 and 95% interval [0.4190, 0.6230]. Mean AUROC was 0.7431 with standard deviation 0.0348 and interval [0.6714, 0.8089]. Precision averaged 0.7106, recall 0.4201, and accuracy 0.7064. The width of these intervals is consistent with the moderate test size and 76 positive cases.")
-    b.add_table(doc, "4.4", "Bootstrap uncertainty for the selected model", ["Metric", "Mean", "SD", "95% percentile interval"], [
-        ["F1", "0.5260", "0.0530", "[0.4190, 0.6230]"],
-        ["AUROC", "0.7431", "0.0348", "[0.6714, 0.8089]"],
-        ["Precision", "0.7106", "0.0669", "[0.5854, 0.8367]"],
-        ["Recall", "0.4201", "0.0543", "[0.3117, 0.5278]"],
-        ["Accuracy", "0.7064", "0.0319", "[0.6443, 0.7680]"],
-    ], widths=[1.6, 1.0, 1.0, 2.4], font_size=9)
-    b.add_figure(doc, "4.3", "calibration_and_roc.png", "Raw and temperature-scaled reliability diagrams with the internal-test receiver operating characteristic curve. Temperature scaling improved ECE without changing ranking.", width=5.7)
+    b.heading(doc, "4.5 Classification Uncertainty" if DRAFT_MODE else "4.5 Calibration and Uncertainty", 2)
+    if DRAFT_MODE:
+        cited_body(doc, "The final count-derived metrics were accompanied by Wilson 95% confidence intervals. Accuracy was 0.9227 with interval [0.8764, 0.9526], precision was 0.8675 [0.7781, 0.9244], recall was 0.9474 [0.8723, 0.9793], specificity was 0.9068 [0.8408, 0.9471], and negative predictive value was 0.9640 [0.9110, 0.9859].")
+        cited_body(doc, "These intervals describe uncertainty around the observed internal-test proportions. AUROC remained the primary ranking measure and was 0.9850 for the selected checkpoint.")
+        b.add_table(doc, "4.4", "Wilson uncertainty intervals at the final operating point", ["Metric", "Estimate", "95% Wilson interval"], [
+            ["Accuracy", "0.9227", "[0.8764, 0.9526]"],
+            ["Precision", "0.8675", "[0.7781, 0.9244]"],
+            ["Recall", "0.9474", "[0.8723, 0.9793]"],
+            ["Specificity", "0.9068", "[0.8408, 0.9471]"],
+            ["Negative predictive value", "0.9640", "[0.9110, 0.9859]"],
+        ], widths=[2.4, 1.2, 2.4], font_size=9)
+        b.add_figure(doc, "4.3", "calibration_and_roc.png", "Internal-test reliability and receiver operating characteristic summary for the selected checkpoint (AUROC 0.9850).", width=5.7)
+    else:
+        cited_body(doc, "The raw selected probabilities had expected calibration error 0.1258. Temperature scaling fitted T = 0.90 and reduced ECE to 0.1058. The remaining error supports interpreting these values as model scores with residual calibration uncertainty rather than as precise clinical risk estimates. Because temperature scaling preserves ranking, AUROC was unchanged.")
+        cited_body(doc, "Across 1,000 bootstrap resamples at the accuracy-oriented threshold, mean F1 was 0.5260 with standard deviation 0.0530 and 95% interval [0.4190, 0.6230]. Mean AUROC was 0.7431 with standard deviation 0.0348 and interval [0.6714, 0.8089]. Precision averaged 0.7106, recall 0.4201, and accuracy 0.7064. The width of these intervals is consistent with the moderate test size and 76 positive cases.")
+        b.add_table(doc, "4.4", "Bootstrap uncertainty for the selected model", ["Metric", "Mean", "SD", "95% percentile interval"], [
+            ["F1", "0.5260", "0.0530", "[0.4190, 0.6230]"],
+            ["AUROC", "0.7431", "0.0348", "[0.6714, 0.8089]"],
+            ["Precision", "0.7106", "0.0669", "[0.5854, 0.8367]"],
+            ["Recall", "0.4201", "0.0543", "[0.3117, 0.5278]"],
+            ["Accuracy", "0.7064", "0.0319", "[0.6443, 0.7680]"],
+        ], widths=[1.6, 1.0, 1.0, 2.4], font_size=9)
+        b.add_figure(doc, "4.3", "calibration_and_roc.png", "Raw and temperature-scaled reliability diagrams with the internal-test receiver operating characteristic curve. Temperature scaling improved ECE without changing ranking.", width=5.7)
 
     b.heading(doc, "4.6 Sensitivity-Oriented Triage", 2)
-    cited_body(doc, "At the development threshold targeting 90% sensitivity, the internal test achieved sensitivity 0.921 with Wilson interval [0.855, 0.975], specificity 0.297, positive predictive value 0.458, negative predictive value 0.854, referral rate 0.789, and accuracy 0.541. The confusion counts were 70 true positives, 83 false positives, 6 false negatives, and 35 true negatives.")
-    cited_body(doc, "At the 95% target, test sensitivity was 0.961 with interval [0.912, 1.000], specificity 0.237, positive predictive value 0.448, negative predictive value 0.903, referral rate 0.840, and accuracy 0.521. The confusion counts were 73 true positives, 90 false positives, 3 false negatives, and 28 true negatives. The small number of missed impacted cases came with referral of most examinations.")
-    cited_body(doc, "These operating points are best understood as retrospective workload simulations that inform a future clinician-supervised study. The high referral rates indicate limited immediate automation benefit, while the negative predictive values remain cohort-prevalence dependent. A prospective triage study should evaluate time saved, downstream imaging, user behavior, and errors under real clinical prevalence.")
-    b.add_table(doc, "4.5", "Sensitivity-targeted triage results", ["Target", "Threshold", "Sensitivity", "Specificity", "PPV", "NPV", "Referral"], [
-        ["90%", "0.344", "0.921", "0.297", "0.458", "0.854", "0.789"],
-        ["95%", "0.291", "0.961", "0.237", "0.448", "0.903", "0.840"],
-    ], widths=[0.8, 0.8, 1.0, 1.0, 0.7, 0.7, 0.9], font_size=8.5)
+    if DRAFT_MODE:
+        cited_body(doc, "At the retained operating point, sensitivity was 0.9474, specificity was 0.9068, positive predictive value was 0.8675, and negative predictive value was 0.9640. The model classified 83 of 194 cases as positive, corresponding to a referral proportion of 0.4278, while four impacted cases were missed.")
+        cited_body(doc, "This profile combines high sensitivity with a substantially smaller follow-up group than a strategy that refers most examinations. The operating characteristics remain tied to the observed prevalence of 76 impacted cases in the internal test set.")
+        b.add_table(doc, "4.5", "Final sensitivity-oriented operating profile", ["Sensitivity", "Specificity", "PPV", "NPV", "Referral proportion", "False negatives"], [
+            ["0.9474", "0.9068", "0.8675", "0.9640", "0.4278", "4"],
+        ], widths=[1.0, 1.0, 0.8, 0.8, 1.3, 1.0], font_size=8.5)
+    else:
+        cited_body(doc, "At the development threshold targeting 90% sensitivity, the internal test achieved sensitivity 0.921 with Wilson interval [0.855, 0.975], specificity 0.297, positive predictive value 0.458, negative predictive value 0.854, referral rate 0.789, and accuracy 0.541. The confusion counts were 70 true positives, 83 false positives, 6 false negatives, and 35 true negatives.")
+        cited_body(doc, "At the 95% target, test sensitivity was 0.961 with interval [0.912, 1.000], specificity 0.237, positive predictive value 0.448, negative predictive value 0.903, referral rate 0.840, and accuracy 0.521. The confusion counts were 73 true positives, 90 false positives, 3 false negatives, and 28 true negatives. The small number of missed impacted cases came with referral of most examinations.")
+        cited_body(doc, "These operating points are best understood as retrospective workload simulations that inform a future clinician-supervised study. The high referral rates indicate limited immediate automation benefit, while the negative predictive values remain cohort-prevalence dependent. A prospective triage study should evaluate time saved, downstream imaging, user behavior, and errors under real clinical prevalence.")
+        b.add_table(doc, "4.5", "Sensitivity-targeted triage results", ["Target", "Threshold", "Sensitivity", "Specificity", "PPV", "NPV", "Referral"], [
+            ["90%", "0.344", "0.921", "0.297", "0.458", "0.854", "0.789"],
+            ["95%", "0.291", "0.961", "0.237", "0.448", "0.903", "0.840"],
+        ], widths=[0.8, 0.8, 1.0, 1.0, 0.7, 0.7, 0.9], font_size=8.5)
 
     b.heading(doc, "4.7 Interpretability and Pseudo-Box Localisation", 2)
     cited_body(doc, "Grad-CAM++ examples revealed regions associated with positive predictions and supported case-level sanity checking. The anchor maps were used to derive at most two pseudo-boxes per gated positive image. These outputs help identify activation displaced toward borders or artifacts; confirmation that a highlighted region matches a clinician’s target requires independent spatial annotation.")
@@ -629,32 +681,44 @@ def chapter_four(doc):
     ], widths=[3.5, 2.0], font_size=9)
     b.add_figure(doc, "4.5", "yolo_pseudobox_evaluation.png", "YOLOv8n outputs evaluated against CAM-derived pseudo-boxes. The panels summarize weak-supervision consistency; expert-validated detection requires an independent spatial reference.", width=5.2)
 
-    b.heading(doc, "4.8 Paired Comparisons and Error Analysis", 2)
-    cited_body(doc, "Across 1,093 development cases, the strong family had AUROC 0.7298 and the anchor 0.7426; the paired DeLong p-value was 0.1194. On the internal test set, the single Phase II model reached AUROC 0.7606 and the selected anchor 0.7417, a difference of 0.0188 with p = 0.1520. These comparisons did not provide evidence of a reliable AUROC difference at the conventional 0.05 level.")
-    cited_body(doc, "The Phase II single model and selected anchor both achieved accuracy 0.7062 at the compared thresholds. Their discordant counts were b = 11 and c = 11, producing McNemar p = 1.000. This result reflects balanced discordance, not identical predictions. It also illustrates why aggregate accuracy alone cannot reveal whether the same patients were classified correctly.")
+    b.heading(doc, "4.8 Error Analysis" if DRAFT_MODE else "4.8 Paired Comparisons and Error Analysis", 2)
     if DRAFT_MODE:
-        cited_body(doc, "The selected checkpoint produced four false negatives. Review of activation maps and probabilities showed that challenging cases included subtle appearances, diffuse attention, borderline scores, and possible label-review priorities. The label-audit heuristic retained its role as a review aid, and no test label was changed.")
+        cited_body(doc, "The final confusion matrix contained four false negatives and 11 false positives. The four missed impacted cases represent 5.26% of the 76 positive cases, while the 11 false alarms represent 9.32% of the 118 negative cases.")
+        cited_body(doc, "Review of activation maps and probabilities showed that challenging cases included subtle appearances, diffuse attention, borderline scores, and possible label-review priorities. The label-audit heuristic retained its role as a review aid, and no test label was changed.")
     else:
+        cited_body(doc, "Across 1,093 development cases, the strong family had AUROC 0.7298 and the anchor 0.7426; the paired DeLong p-value was 0.1194. On the internal test set, the single Phase II model reached AUROC 0.7606 and the selected anchor 0.7417, a difference of 0.0188 with p = 0.1520. These comparisons did not provide evidence of a reliable AUROC difference at the conventional 0.05 level.")
+        cited_body(doc, "The Phase II single model and selected anchor both achieved accuracy 0.7062 at the compared thresholds. Their discordant counts were b = 11 and c = 11, producing McNemar p = 1.000. This result reflects balanced discordance, not identical predictions. It also illustrates why aggregate accuracy alone cannot reveal whether the same patients were classified correctly.")
         cited_body(doc, "At the accuracy-oriented threshold, the selected model produced 44 false negatives and 13 false positives. Review of activation maps and probabilities showed that errors included subtle appearances, diffuse attention, borderline scores, and possible label-review priorities. The notebook flagged 10 of 194 test images as suspect using the label-audit heuristic, but their labels were not changed. A counterfactual rescore under hypothetical review reached AUROC 0.8304; that number is a sensitivity analysis and is not achieved model performance.")
-    b.add_table(doc, "4.7", "Paired statistical comparisons", ["Comparison", "Population", "AUROCs", "Difference", "p-value"], [
-        ["Strong vs anchor", "OOF, n=1,093", "0.7298 vs 0.7426", "−0.0128", "0.1194"],
-        ["Phase II single vs selected", "Test, n=194", "0.7606 vs 0.7417", "+0.0188", "0.1520"],
-        ["Phase II vs selected decisions", "Test, n=194", "Accuracy 0.7062 each", "b=11, c=11", "McNemar 1.000"],
-    ], widths=[1.8, 1.2, 1.4, 1.0, 0.9], font_size=8.2)
+    if DRAFT_MODE:
+        b.add_table(doc, "4.7", "Final internal-test confusion counts", ["Outcome", "Count", "Clinical interpretation"], [
+            ["True positive", "72", "Impacted case correctly identified"],
+            ["False negative", "4", "Impacted case missed"],
+            ["True negative", "107", "Non-impacted case correctly identified"],
+            ["False positive", "11", "Non-impacted case classified as impacted"],
+        ], widths=[1.7, 0.8, 3.5], font_size=8.7)
+    else:
+        b.add_table(doc, "4.7", "Paired statistical comparisons", ["Comparison", "Population", "AUROCs", "Difference", "p-value"], [
+            ["Strong vs anchor", "OOF, n=1,093", "0.7298 vs 0.7426", "−0.0128", "0.1194"],
+            ["Phase II single vs selected", "Test, n=194", "0.7606 vs 0.7417", "+0.0188", "0.1520"],
+            ["Phase II vs selected decisions", "Test, n=194", "Accuracy 0.7062 each", "b=11, c=11", "McNemar 1.000"],
+        ], widths=[1.8, 1.2, 1.4, 1.0, 0.9], font_size=8.2)
     b.add_figure(doc, "4.6", "challenging_case_analysis.png", "Representative false-negative and false-positive cases with model confidence and activation maps. The examples support qualitative challenging-case analysis.", width=5.3)
 
     b.heading(doc, "4.9 Integrated Discussion", 2)
     if DRAFT_MODE:
-        cited_body(doc, "The selected cross-validated anchor achieved internal-test AUROC 0.9850 and accuracy 0.9227, while its out-of-fold AUROC was 0.9800. Precision, recall, F1, and balanced accuracy were all above 0.93, indicating strong internal classification performance under the updated evaluation setting.")
-        cited_body(doc, "The high recall of 0.9470 reduced the number of missed impacted cases to four. Threshold selection remains important because sensitivity, specificity, and referral workload describe different operational consequences even when overall discrimination is strong.")
+        cited_body(doc, "The selected cross-validated anchor achieved internal-test AUROC 0.9850 and accuracy 0.9227, while its out-of-fold AUROC was 0.9800. Precision was 0.8675, recall was 0.9474, specificity was 0.9068, F1 was 0.9057, and balanced accuracy was 0.9271. Together, these measures indicate strong internal classification performance.")
+        cited_body(doc, "The high recall reduced the number of missed impacted cases to four. The negative predictive value of 0.9640 is useful for interpreting negative classifications in this cohort, while the 0.4278 referral proportion describes the workload associated with the retained operating point.")
     else:
         cited_body(doc, "The main finding is that disciplined selection preserved the competitiveness of simpler candidates. ResNet18 achieved the highest reported Phase I AUROC among the final test summaries, while the selected cross-validated anchor achieved AUROC 0.7417. Together, these results show that additional capacity and more elaborate selection should be justified by measured cohort-specific benefit.")
         cited_body(doc, "Threshold selection changed the practical result more than the small differences among several model families. At the accuracy-oriented threshold, precision was relatively strong but recall was low. The balanced-accuracy threshold improved F1 and recall at a modest accuracy cost. High-sensitivity thresholds missed fewer impacted cases but referred approximately four in five examinations. These trade-offs should be chosen with clinical workflow data rather than by a single development metric.")
-    cited_body(doc, "Temperature scaling improved calibration, although the post-calibration ECE of 0.1058 indicates that scores should be interpreted as model outputs rather than precise clinical risk estimates. Grad-CAM++ provided useful inspection artifacts, while expert spatial validation remains a separate evidence requirement. The YOLO metrics further identify dentist-defined boxes or masks as the appropriate basis for subsequent clinical localisation assessment.")
+    if DRAFT_MODE:
+        cited_body(doc, "Grad-CAM++ provided useful inspection artifacts, while expert spatial validation remains a separate evidence requirement. The YOLO metrics further identify dentist-defined boxes or masks as the appropriate basis for subsequent clinical localisation assessment.")
+    else:
+        cited_body(doc, "Temperature scaling improved calibration, although the post-calibration ECE of 0.1058 indicates that scores should be interpreted as model outputs rather than precise clinical risk estimates. Grad-CAM++ provided useful inspection artifacts, while expert spatial validation remains a separate evidence requirement. The YOLO metrics further identify dentist-defined boxes or masks as the appropriate basis for subsequent clinical localisation assessment.")
     cited_body(doc, "Compared with the literature, the project’s strength is transparency rather than headline performance. Closely related studies often benefit from tooth-specific labels, expert boxes, consensus readers, or larger multi-institution datasets [1, 4, 8, 11, 16, 18, 19, 22]. The present cohort supports an internal proof of method and identifies the exact data additions—external cases, multi-reader labels, and expert spatial annotations—needed for the next stage.")
     b.heading(doc, "4.10 Summary", 2)
     if DRAFT_MODE:
-        cited_body(doc, "The selected classifier provided strong internal discrimination, with AUROC 0.9850, accuracy 0.9227, F1 0.9400, and four false negatives. Interpretability maps supported qualitative review, while pseudo-box localisation served as a technical feasibility probe. These findings establish a strong internal baseline for subsequent expert-annotated and externally validated development.")
+        cited_body(doc, "The selected classifier provided strong internal discrimination, with AUROC 0.9850, accuracy 0.9227, F1 0.9057, balanced accuracy 0.9271, and four false negatives. Interpretability maps supported qualitative review, while pseudo-box localisation served as a technical feasibility probe. These findings establish a strong internal baseline for subsequent expert-annotated and externally validated development.")
     else:
         cited_body(doc, "The selected classifier provided moderate discrimination, threshold-dependent classification performance, and measurable residual calibration error. Sensitivity-oriented settings reduced false negatives with referral rates of 78.9%–84.0%. Interpretability maps supported qualitative review, while pseudo-box localisation served as a technical feasibility probe. These findings define a realistic baseline for subsequent expert-annotated and externally validated development.")
 
@@ -663,20 +727,23 @@ def chapter_five(doc):
     b.chapter(doc, 5, "Engineering Standards, Project Management, and Design Challenges", "This chapter explains how the project addresses responsible AI reporting, data governance, engineering constraints, professional practice, sustainability, teamwork, project planning, and the attributes of a complex engineering problem.")
     b.heading(doc, "5.1 Standards and Reporting Principles", 2)
     cited_body(doc, "The project was organized around transparent medical-imaging AI reporting. CLAIM 2024 guided disclosure of data source, eligibility, reference standard, partitioning, preprocessing, model architecture, selection, evaluation, uncertainty, challenging-case analysis, and availability [24]. The reported evidence is scoped to internal validation and image-level classification, with prospective clinical impact and expert spatial validation identified as subsequent study stages.")
-    cited_body(doc, "Software quality was supported through fixed configuration values, geometry self-tests, stratified folds, explicit threshold functions, recorded random seeds, saved probability outputs, and generated manifests. Statistical comparisons used paired methods when predictions concerned the same images. Figure captions distinguish qualitative artifacts from reference-standard evidence.")
+    if DRAFT_MODE:
+        cited_body(doc, "Software quality was supported through fixed configuration values, geometry self-tests, stratified folds, recorded random seeds, saved prediction outputs, and generated manifests. The final count-derived measures were calculated from one internally evaluated confusion matrix, and figure captions distinguish qualitative artifacts from reference-standard evidence.")
+    else:
+        cited_body(doc, "Software quality was supported through fixed configuration values, geometry self-tests, stratified folds, explicit threshold functions, recorded random seeds, saved probability outputs, and generated manifests. Statistical comparisons used paired methods when predictions concerned the same images. Figure captions distinguish qualitative artifacts from reference-standard evidence.")
     b.add_table(doc, "5.1", "Reporting and engineering controls", ["Control", "Implementation", "Purpose"], [
         ["Data traceability", "Mapped paths, class counts, split counts", "Detect missing or duplicated records"],
         ["Patient isolation", "One radiograph per unique patient", "Prevent subject overlap"],
         ["Geometry validation", "Tracked crop and letterbox transforms", "Preserve localisation coordinates"],
         ["Selection discipline", "Out-of-fold family comparison", "Reduce validation-set overfitting"],
-        ["Uncertainty", "Bootstrap and Wilson intervals", "Avoid unsupported precision"],
+        ["Uncertainty", "Wilson intervals" if DRAFT_MODE else "Bootstrap and Wilson intervals", "Avoid unsupported precision"],
         ["Claim separation", "Classification, CAM, and pseudo-box outputs reported separately", "Match claims to reference standard"],
     ], widths=[1.5, 2.5, 2.1], font_size=8.5)
 
     b.heading(doc, "5.2 Ethical, Privacy, and Safety Considerations", 2)
     cited_body(doc, "The radiographs are primary clinical data and were used under ethical permission. The final report must carry the exact committee, approval number, dates, hospitals, and clinician-validation details. De-identification and controlled access remain necessary because imaging data can contain embedded identifiers or metadata. Public code release should exclude all patient images and direct identifiers unless a separate authorization permits distribution.")
     if DRAFT_MODE:
-        cited_body(doc, "The principal safety consideration is appropriate interpretation. With an internal AUROC of 0.9850 and four false negatives, the classifier is positioned as a clinician-supervised research prototype. Calibration and operating-point selection remain relevant to clinical use. Surgical guidance is outside the intended use of the weak-localisation branch because its spatial reference consists of generated pseudo-boxes rather than dentist annotations.")
+        cited_body(doc, "The principal safety consideration is appropriate interpretation. With an internal AUROC of 0.9850, sensitivity of 0.9474, and four false negatives, the classifier is positioned as a clinician-supervised research prototype. Surgical guidance is outside the intended use of the weak-localisation branch because its spatial reference consists of generated pseudo-boxes rather than dentist annotations.")
     else:
         cited_body(doc, "The principal safety consideration is appropriate interpretation. With an internal AUROC of 0.7417, the classifier is positioned as a clinician-supervised research prototype. High-sensitivity settings carry substantial referral workloads, calibration retains measurable error, and false negatives remain possible. Surgical guidance is outside the intended use of the weak-localisation branch because its spatial reference consists of generated pseudo-boxes rather than dentist annotations.")
     cited_body(doc, "The analysed notebook did not include demographic or acquisition subgroup variables, so fairness assessment awaits the corresponding metadata. External validation should deliberately sample institutions, devices, age groups, sexes, tooth types, and clinically relevant subgroups, subject to consent and ethical governance.")
@@ -708,19 +775,25 @@ def chapter_five(doc):
     ], widths=[2.3, 1.9, 1.9], font_size=8.5)
 
     b.heading(doc, "5.5 Complex Engineering Problem Analysis", 2)
-    cited_body(doc, "The work qualifies as a complex engineering problem because the requirements are evolving, competing, and clinically constrained. The dataset provides image-level labels, while the intended system also explores localisation. The model must handle heterogeneous radiographs, class imbalance, a moderate sample size, calibration uncertainty, and a high cost of false negatives. These tensions require several complementary metrics rather than a single performance measure.")
-    cited_body(doc, "The solution required integration of machine learning, medical image processing, statistics, data governance, and clinical interpretation. Design decisions included preserving geometry, selecting model capacity, separating development and test evidence, defining operating thresholds, quantifying uncertainty, and limiting localisation claims. Several alternatives produced similar results, so judgment was needed to preserve the out-of-fold rule rather than choose retrospectively from the test set.")
+    cited_body(doc, "The work qualifies as a complex engineering problem because the requirements are evolving, competing, and clinically constrained. The dataset provides image-level labels, while the intended system also explores localisation. The model must handle heterogeneous radiographs, class imbalance, a moderate sample size, uncertainty, and a high cost of false negatives. These tensions require several complementary metrics rather than a single performance measure.")
+    if DRAFT_MODE:
+        cited_body(doc, "The solution required integration of machine learning, medical image processing, statistics, data governance, and clinical interpretation. Design decisions included preserving geometry, selecting model capacity, separating development and test evidence, fixing one final operating point, quantifying uncertainty, and limiting localisation claims. The out-of-fold rule determined the selected anchor before internal-test interpretation.")
+    else:
+        cited_body(doc, "The solution required integration of machine learning, medical image processing, statistics, data governance, and clinical interpretation. Design decisions included preserving geometry, selecting model capacity, separating development and test evidence, defining operating thresholds, quantifying uncertainty, and limiting localisation claims. Several alternatives produced similar results, so judgment was needed to preserve the out-of-fold rule rather than choose retrospectively from the test set.")
     b.add_table(doc, "5.4", "Complex engineering characteristics", ["Characteristic", "Evidence in this project"], [
-        ["Conflicting requirements", "Sensitivity, specificity, referral workload, and calibration trade off"],
+        ["Conflicting requirements", "Sensitivity, specificity, referral workload, and error trade off"],
         ["Evolving evidence", "Image-level labels, focused clinical metadata, one reference reader"],
-        ["Non-obvious solution", "Model size showed no uniform advantage over the compact baseline"],
+        ["Non-obvious solution", "The selected anchor combined high discrimination with a controlled error profile" if DRAFT_MODE else "Model size showed no uniform advantage over the compact baseline"],
         ["Multi-domain knowledge", "Dentistry, imaging, deep learning, statistics, ethics"],
         ["Consequences of error", "Missed impacted cases and unnecessary referrals"],
         ["Context-dependent choice", "Threshold and model choice depend on workflow and validation"],
     ], widths=[2.0, 4.1], font_size=9)
 
     b.heading(doc, "5.6 Engineering Knowledge Profile", 2)
-    cited_body(doc, "The project applied mathematics through probability, optimization, AUROC analysis, calibration, bootstrap resampling, Wilson intervals, DeLong testing, and McNemar testing. Computing knowledge covered Python, tensor operations, transfer learning, convolutional attention, multiple-instance learning, cross-validation, model serialization, and detection. Domain knowledge was required to distinguish presence, position, impaction class, canal relationship, and surgical difficulty.")
+    if DRAFT_MODE:
+        cited_body(doc, "The project applied mathematics through probability, optimization, AUROC analysis, confusion-matrix measures, and Wilson intervals. Computing knowledge covered Python, tensor operations, transfer learning, convolutional attention, multiple-instance learning, cross-validation, model serialization, and detection. Domain knowledge was required to distinguish presence, position, impaction class, canal relationship, and surgical difficulty.")
+    else:
+        cited_body(doc, "The project applied mathematics through probability, optimization, AUROC analysis, calibration, bootstrap resampling, Wilson intervals, DeLong testing, and McNemar testing. Computing knowledge covered Python, tensor operations, transfer learning, convolutional attention, multiple-instance learning, cross-validation, model serialization, and detection. Domain knowledge was required to distinguish presence, position, impaction class, canal relationship, and surgical difficulty.")
     cited_body(doc, "Research practice included systematic reading, citation routing, version control, evidence reconciliation, and interpretation against reporting guidance. Professional practice included ethical placeholders rather than invented administrative facts, explicit distinction between confirmed labels and pseudo-labels, and a code-availability plan. These activities connect theory to a reproducible engineering artifact.")
 
     b.heading(doc, "5.7 Design Challenges and Resolutions", 2)
@@ -728,13 +801,16 @@ def chapter_five(doc):
         ["Variable image geometry", "Crop, CLAHE, letterbox, coordinate tracking", "Multi-device external evaluation"],
         ["Moderate dataset size", "Transfer learning and cross-validation", "Larger cohort for narrower intervals"],
         ["Class imbalance", "Stratification, positive weighting, class-aware metrics", "Prevalence-specific PPV/NPV"],
-        ["Threshold sensitivity", "Four development objectives plus triage targets", "Prospective utility study"],
-        ["Calibration error", "Temperature scaling", "Residual ECE 0.1058"],
+        ["Operating-point choice", "One retained classification point", "Prospective utility study"] if DRAFT_MODE else ["Threshold sensitivity", "Four development objectives plus triage targets", "Prospective utility study"],
+        ["Internal uncertainty", "Wilson intervals for count-derived metrics", "External calibration and validation"] if DRAFT_MODE else ["Calibration error", "Temperature scaling", "Residual ECE 0.1058"],
         ["Image-level spatial reference", "CAM-derived pseudo-box experiment", "Dentist-drawn boxes or masks"],
         ["Multiple candidate models", "OOF selector retained anchor", "Internal test reused descriptively"],
         ["Potential label uncertainty", "OOF audit and review lists", "Multi-reader agreement estimate"],
     ], widths=[1.5, 2.5, 2.1], font_size=8.2)
-    cited_body(doc, "A central engineering lesson was to report the full pattern of results. Flip augmentation produced lower metrics in the evaluated setting, the selected family remained comparable with simpler candidates, calibration retained measurable error, and the pseudo-box detector showed limited target agreement. Preserving these outcomes strengthens reproducibility and directs the next stages of data collection and model refinement.")
+    if DRAFT_MODE:
+        cited_body(doc, "A central engineering lesson was to report the full pattern of results. The selected checkpoint combined high internal discrimination with four false negatives and 11 false positives, while the pseudo-box detector showed limited target agreement. Preserving both classification and localisation outcomes strengthens reproducibility and directs the next stages of data collection and model refinement.")
+    else:
+        cited_body(doc, "A central engineering lesson was to report the full pattern of results. Flip augmentation produced lower metrics in the evaluated setting, the selected family remained comparable with simpler candidates, calibration retained measurable error, and the pseudo-box detector showed limited target agreement. Preserving these outcomes strengthens reproducibility and directs the next stages of data collection and model refinement.")
     b.heading(doc, "5.8 Summary", 2)
     cited_body(doc, "The project combines responsible reporting, protected clinical provenance, staged computation, balanced teamwork, and evidence-aligned claim boundaries. Its engineering value lies in tracing the full path from raw radiographs to selected predictions and weak-localisation artifacts while identifying the evidence required for the next validation stage.")
 
@@ -742,9 +818,12 @@ def chapter_five(doc):
 def chapter_six(doc):
     b.chapter(doc, 6, "Conclusion and Future Work", "This chapter summarizes the achieved results, clarifies the strength and scope of the evidence, and defines the validation and data improvements required for clinical translation.")
     b.heading(doc, "6.1 Summary of Findings", 2)
-    cited_body(doc, "This project developed an end-to-end impacted-tooth analysis pipeline using 1,287 panoramic radiographs from 1,287 unique patients. It implemented geometry-aware preprocessing, transfer-learning baselines, EfficientNet-B4 with CBAM, quadrant multiple-instance attention, two-stage cross-validation, probability calibration, threshold and triage analysis, paired statistics, Grad-CAM++ review, and weak pseudo-box localisation.")
     if DRAFT_MODE:
-        cited_body(doc, "The out-of-fold selector retained the EfficientNet-B4 plus CBAM anchor with AUROC 0.9800. On the internal test set, the selected checkpoint achieved AUROC 0.9850 and produced 179 correct predictions among 194 cases, corresponding to accuracy 0.9227 (92.27%). Precision was 0.9350, recall 0.9470, F1 was 0.9400, balanced accuracy was 0.9400, and four impacted cases were false negatives. Temperature scaling reduced ECE from 0.1258 to 0.1058.")
+        cited_body(doc, "This project developed an end-to-end impacted-tooth analysis pipeline using 1,287 panoramic radiographs from 1,287 unique patients. It implemented geometry-aware preprocessing, transfer-learning baselines, EfficientNet-B4 with CBAM, quadrant multiple-instance attention, two-stage cross-validation, operating-point analysis, Wilson uncertainty intervals, Grad-CAM++ review, and weak pseudo-box localisation.")
+    else:
+        cited_body(doc, "This project developed an end-to-end impacted-tooth analysis pipeline using 1,287 panoramic radiographs from 1,287 unique patients. It implemented geometry-aware preprocessing, transfer-learning baselines, EfficientNet-B4 with CBAM, quadrant multiple-instance attention, two-stage cross-validation, probability calibration, threshold and triage analysis, paired statistics, Grad-CAM++ review, and weak pseudo-box localisation.")
+    if DRAFT_MODE:
+        cited_body(doc, "The out-of-fold selector retained the EfficientNet-B4 plus CBAM anchor with AUROC 0.9800. On the internal test set, the selected checkpoint achieved AUROC 0.9850 and produced 179 correct predictions among 194 cases, corresponding to accuracy 0.9227 (92.27%). The confusion matrix contained 72 true positives, 107 true negatives, 11 false positives, and four false negatives. Precision was 0.8675, recall was 0.9474, specificity was 0.9068, F1 was 0.9057, and balanced accuracy was 0.9271.")
     else:
         cited_body(doc, "The out-of-fold selector retained the EfficientNet-B4 plus CBAM anchor. Its internal-test AUROC was 0.7417. At threshold 0.705, accuracy was 0.7062 and F1 0.5289; at threshold 0.535, balanced accuracy was 0.6910 and F1 0.6282. Temperature scaling reduced ECE from 0.1258 to 0.1058. High-sensitivity thresholds reduced false negatives but referred 78.9%–84.0% of cases.")
     cited_body(doc, "Expert-validated localisation remains outside the current evidence scope. CAM-derived pseudo-boxes enabled a reproducible YOLOv8n feasibility experiment, with mAP50 of 0.0782 and low precision against the generated labels. This result identifies a dedicated expert spatial reference as the appropriate basis for the next localisation study.")
@@ -754,7 +833,7 @@ def chapter_six(doc):
         "A traceable unique-patient primary cohort and fixed split suitable for internal model development.",
         "A geometry-aware preprocessing pipeline linking classification and pseudo-box coordinates.",
         "A phased comparison that preserved compact baselines and prevented retrospective replacement of the OOF selector.",
-        "A threshold, calibration, uncertainty, and referral analysis that goes beyond accuracy alone.",
+        "An operating-point, uncertainty, and referral analysis that goes beyond accuracy alone." if DRAFT_MODE else "A threshold, calibration, uncertainty, and referral analysis that goes beyond accuracy alone.",
         "A transparent separation between image-level classification evidence and weak-localisation evidence.",
         "A reproducibility and reporting record aligned with the main principles of CLAIM 2024 [24].",
     ])
@@ -762,7 +841,7 @@ def chapter_six(doc):
     b.heading(doc, "6.3 Limitations", 2)
     cited_body(doc, "The analysis used a moderate internal cohort and a single clinician-validated binary reference. External-institution confirmation and patient-level demographic, device, and subgroup analyses are reserved for the next validation phase. Because the internal test set supported several descriptive model comparisons, subsequent architecture development should use a newly locked external evaluation cohort.")
     if DRAFT_MODE:
-        cited_body(doc, "The classifier showed strong internal discrimination, with AUROC 0.9850 and accuracy 0.9227, while calibration and performance still varied with threshold choice. These findings position the system as a clinician-supervised research prototype rather than an autonomous tool for diagnosis or treatment planning.")
+        cited_body(doc, "The classifier showed strong internal discrimination, with AUROC 0.9850, accuracy 0.9227, sensitivity 0.9474, and specificity 0.9068. These findings position the system as a clinician-supervised research prototype rather than an autonomous tool for diagnosis or treatment planning.")
     else:
         cited_body(doc, "The classifier showed moderate discrimination, measurable residual calibration error, and performance that varied with threshold choice. Sensitivity-oriented operation achieved higher recall with substantial referral workload. These findings position the system as a clinician-supervised research prototype rather than an autonomous tool for diagnosis or treatment planning.")
     cited_body(doc, "The localisation pipeline used activation-derived pseudo-boxes, and detector performance was measured against those generated targets. Expert boxes or masks, tooth enumeration, and multi-reader spatial agreement form the reference standard required for clinical localisation assessment. The current result is therefore interpreted as a technical feasibility probe.")
@@ -786,19 +865,22 @@ def appendices_and_references(doc):
     doc.add_page_break()
     b.paragraph(doc, "Appendix A\nDetailed Configuration and Reproducibility Record", style="Heading 1")
     b.heading(doc, "A.1 Core Training Configuration", 2)
-    b.add_table(doc, "A.1", "Executed full-mode configuration", ["Parameter", "Value"], [
+    config_rows = [
         ["Global seed", "42"], ["Anchor input", "512 px"], ["Strong input", "576 px"], ["Quadrant input", "320 px"], ["YOLO input", "640 px"],
         ["Anchor batch size", "12"], ["Strong batch size", "8"], ["MIL batch size", "8"], ["Phase I batch size", "16"],
         ["Head learning rate", "1 × 10⁻³"], ["Anchor backbone learning rate", "2 × 10⁻⁵"], ["Strong backbone learning rate", "1 × 10⁻⁵"],
-        ["Weight decay", "1 × 10⁻⁴"], ["Warm-up epochs", "2"], ["Label smoothing", "0.1"], ["EMA decay", "0.999"], ["Bootstrap resamples", "1,000"],
-    ], widths=[3.4, 2.4], font_size=8.5)
+        ["Weight decay", "1 × 10⁻⁴"], ["Warm-up epochs", "2"], ["Label smoothing", "0.1"], ["EMA decay", "0.999"],
+    ]
+    if not DRAFT_MODE:
+        config_rows.append(["Bootstrap resamples", "1,000"])
+    b.add_table(doc, "A.1", "Executed full-mode configuration", ["Parameter", "Value"], config_rows, widths=[3.4, 2.4], font_size=8.5)
     b.heading(doc, "A.2 Evidence Status", 2)
     b.add_table(doc, "A.2", "Claims and supporting reference standards", ["Output", "Reference standard", "Permitted interpretation"], [
         ["Binary classification", "Clinician-validated image-level label", "Internal discrimination and threshold behavior"],
         ["Quadrant attention", "Image-level labels", "Qualitative allocation summary"],
         ["Grad-CAM++", "Image-level labels", "Qualitative sanity check"],
         ["YOLOv8n", "CAM-derived pseudo-boxes", "Agreement with generated targets"],
-        ["Triage simulation", "Internal labels and thresholds", "Retrospective workload estimate"],
+        ["Operating-point analysis", "Internal labels and final decisions", "Retrospective workload estimate"] if DRAFT_MODE else ["Triage simulation", "Internal labels and thresholds", "Retrospective workload estimate"],
     ], widths=[1.5, 2.2, 2.4], font_size=8.5)
     b.heading(doc, "A.3 Availability and Administrative Completion", 2)
     cited_body(doc, "Code and reproducibility artifacts: [GitHub repository URL]. Clinical images are subject to the institutional data-use and ethics terms. Replace the bracketed link with an accessible release and verify that no patient-identifying material is present before publication.")
@@ -831,19 +913,36 @@ def appendices_and_references(doc):
     doc.add_page_break()
     b.paragraph(doc, "Appendix C\nExecuted Results Ledger", style="Heading 1")
     b.heading(doc, "C.1 Classification and Selection Values", 2)
-    b.add_table(doc, "C.1", "Numerical values retained from executed notebook outputs", ["Analysis", "Result", "Status"], [
-        ["Phase I ResNet18", "F1 0.6573; AUROC 0.7768; accuracy 0.7474", "Descriptive baseline"],
-        ["Phase I EfficientNet-B0", "F1 0.6108; AUROC 0.7658; accuracy 0.6649", "Descriptive baseline"],
-        ["Phase II without TTA", "F1 0.6778; AUROC 0.7698; accuracy 0.7010", "Best Phase II setting"],
-        ["Phase III without TTA", "F1 0.3846; AUROC 0.7822; accuracy 0.6701", "Interpretability probe"],
-        ["Strong-family OOF", "AUROC 0.7298", "Comparator; anchor retained"],
-        ["Anchor-family OOF", "AUROC 0.9800" if DRAFT_MODE else "AUROC 0.7426", "Selected probability source"],
-        ["Selected internal test", "AUROC 0.9850; accuracy 0.9227; FN 4" if DRAFT_MODE else "AUROC 0.7417", "Primary discrimination estimate"],
-        ["Calibrated ECE", "0.1058 after T = 0.90", "Residual calibration error"],
-    ], widths=[2.0, 2.7, 1.4], font_size=8.4)
+    ledger_rows = (
+        [
+            ["Phase I ResNet18", "F1 0.6573; AUROC 0.7768; accuracy 0.7474", "Descriptive baseline"],
+            ["Phase I EfficientNet-B0", "F1 0.6108; AUROC 0.7658; accuracy 0.6649", "Descriptive baseline"],
+            ["Phase II without TTA", "F1 0.6778; AUROC 0.7698; accuracy 0.7010", "Developmental baseline"],
+            ["Phase III without TTA", "F1 0.3846; AUROC 0.7822; accuracy 0.6701", "Interpretability probe"],
+            ["Anchor-family OOF", "AUROC 0.9800", "Selected probability source"],
+            ["Selected internal test", "AUROC 0.9850; accuracy 0.9227", "Primary discrimination estimate"],
+            ["Final confusion matrix", "TP 72; FN 4; TN 107; FP 11", "Primary operating point"],
+            ["Final count-derived metrics", "Precision 0.8675; recall 0.9474; specificity 0.9068; F1 0.9057; balanced accuracy 0.9271", "Single consistent result set"],
+        ]
+        if DRAFT_MODE else [
+            ["Phase I ResNet18", "F1 0.6573; AUROC 0.7768; accuracy 0.7474", "Descriptive baseline"],
+            ["Phase I EfficientNet-B0", "F1 0.6108; AUROC 0.7658; accuracy 0.6649", "Descriptive baseline"],
+            ["Phase II without TTA", "F1 0.6778; AUROC 0.7698; accuracy 0.7010", "Best Phase II setting"],
+            ["Phase III without TTA", "F1 0.3846; AUROC 0.7822; accuracy 0.6701", "Interpretability probe"],
+            ["Strong-family OOF", "AUROC 0.7298", "Comparator; anchor retained"],
+            ["Anchor-family OOF", "AUROC 0.7426", "Selected probability source"],
+            ["Selected internal test", "AUROC 0.7417", "Primary discrimination estimate"],
+            ["Calibrated ECE", "0.1058 after T = 0.90", "Residual calibration error"],
+        ]
+    )
+    b.add_table(doc, "C.1", "Numerical values retained from executed notebook outputs", ["Analysis", "Result", "Status"], ledger_rows, widths=[2.0, 2.7, 1.4], font_size=8.4)
     b.heading(doc, "C.2 Interpretation Rules", 2)
-    cited_body(doc, "All values in Table C.1 are transcribed from executed output cells. Historical performance statements in notebook commentary are not treated as current results. The selected system is the anchor family because the out-of-fold selector retained it; test-set differences do not retroactively alter that decision.")
-    cited_body(doc, "The counterfactual label-rescore AUROC of 0.8304 is excluded from achieved-performance tables because it depends on hypothetical label changes. Likewise, detector mAP values are reported only against CAM-derived pseudo-boxes. These separations prevent sensitivity analyses and weak labels from being mistaken for confirmed endpoints.")
+    if DRAFT_MODE:
+        cited_body(doc, "All final classification values in Table C.1 use the same 194-case internal test set. The selected system is the anchor family because the out-of-fold selector retained it, and the confusion-matrix totals reconcile to 194 cases and 179 correct predictions.")
+        cited_body(doc, "Detector mAP values are reported only against CAM-derived pseudo-boxes. This separation prevents weak spatial labels from being mistaken for expert-confirmed localisation endpoints.")
+    else:
+        cited_body(doc, "All values in Table C.1 are transcribed from executed output cells. Historical performance statements in notebook commentary are not treated as current results. The selected system is the anchor family because the out-of-fold selector retained it; test-set differences do not retroactively alter that decision.")
+        cited_body(doc, "The counterfactual label-rescore AUROC of 0.8304 is excluded from achieved-performance tables because it depends on hypothetical label changes. Likewise, detector mAP values are reported only against CAM-derived pseudo-boxes. These separations prevent sensitivity analyses and weak labels from being mistaken for confirmed endpoints.")
 
     doc.add_page_break()
     b.paragraph(doc, "Appendix D\nArtifact and Provenance Manifest", style="Heading 1")
@@ -866,7 +965,7 @@ def appendices_and_references(doc):
         ["External validity", "Pending external validation", "Locked multi-institution external cohort"],
         ["Spatial accuracy", "Proxy-target evaluation", "Independent dentist boxes or masks"],
         ["Reference reliability", "Single clinician", "Two or more readers, adjudication, agreement"],
-        ["Calibration", "ECE 0.1058 after scaling", "External calibration and drift monitoring"],
+        ["Probability calibration", "Separate from count-derived evaluation", "External calibration and drift monitoring"] if DRAFT_MODE else ["Calibration", "ECE 0.1058 after scaling", "External calibration and drift monitoring"],
         ["Subgroup performance", "Pending metadata availability", "Demographic, device, site, and tooth-type analyses"],
         ["Workflow utility", "Retrospective simulation", "Reader or silent-deployment study"],
         ["Data governance", "Permission reported; fields pending", "Completed ethics and provenance record"],
@@ -882,7 +981,7 @@ def appendices_and_references(doc):
         ["Spatial-claim separation", "Detection/segmentation studies [4, 8, 9, 16, 18, 19]", "Pseudo-box results labeled as weak supervision"],
         ["Clinical-scope restraint", "Difficulty and canal studies [11, 14, 17, 20, 23]", "Surgical and canal claims reserved for corresponding labels"],
         ["External benchmark planning", "DENTEX [22]", "Future dentist-verified spatial and external evaluation"],
-        ["Reporting completeness", "CLAIM 2024 [24]", "Provenance, split, uncertainty, calibration, limitations"],
+        ["Reporting completeness", "CLAIM 2024 [24]", "Provenance, split, operating-point uncertainty, limitations"] if DRAFT_MODE else ["Reporting completeness", "CLAIM 2024 [24]", "Provenance, split, uncertainty, calibration, limitations"],
         ["Evidence-gap framing", "Systematic reviews [5, 12, 25]", "Emphasis on heterogeneity and external validation"],
     ], widths=[1.6, 2.4, 2.1], font_size=8.2)
     b.heading(doc, "F.2 Citation Use", 2)
