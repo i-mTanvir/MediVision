@@ -39,6 +39,38 @@ SUPERVISOR = "Dr. Arif Mahmud"
 SUPERVISOR_DESIGNATION = "Associate Professor & Associate Head"
 CO_SUPERVISOR = "Dr. Md Zahid Hasan"
 CO_SUPERVISOR_DESIGNATION = "Associate Professor"
+SUBMISSION_DATE = "09 September 2026"
+COLLECTION_PERIOD = "October 2025 to April 2026"
+ETHICS_COMMITTEE = "Institutional Ethical Review Committee (IERC), Daffodil International University"
+ETHICS_REFERENCE = "IEC-FSIT/DIU/2026/2023"
+VALIDATING_CLINICIAN = "Dr. Nur Nobi"
+VALIDATING_CLINICIAN_RECORD = "Dr. Nur Nobi, Family Dental Care Hospital"
+VALIDATING_CLINICIAN_PROSE = "Dr. Nur Nobi of Family Dental Care Hospital"
+CODE_REPOSITORY = "https://github.com/Anim1400/Dental"
+HOSPITAL_NAMES = [
+    "Family Dental Care Hospital",
+    "Raipur Dental Care Hospital",
+    "Apolo Dental Hospital",
+    "Shumi's Dental Hospital",
+    "Shahed Bhai Hospital",
+    "Ramganj Dental Hospital",
+    "Lineon Dental Hospital",
+    "Evercare Dental Hospital",
+    "Ma Dental Care Hospital",
+    "Jannat Dental Hospital",
+    "DigiLab Hospital",
+    "IBN Sina Hospital",
+    "Alok Healthcare Hospital",
+    "Popular Hospital",
+    "Labaid Hospital",
+    "Medinet Healthcare Hospital",
+    "Medinet Private Hospital",
+    "Ibrahim General Hospital",
+    "Exceptional Dental Hospital",
+    "Nusrat Dental Care Hospital",
+    "Narayanganj Dental Hospital",
+]
+HOSPITALS_TEXT = ", ".join(HOSPITAL_NAMES[:-1]) + ", and " + HOSPITAL_NAMES[-1]
 
 spec = importlib.util.spec_from_file_location("medvision_builder", BASE_BUILDER)
 b = importlib.util.module_from_spec(spec)
@@ -153,6 +185,15 @@ def cited_body(doc, text, first_line=True):
         cursor = match.end()
     if cursor < len(text):
         run = p.add_run(text[cursor:])
+        b.set_run_font(run, 12)
+    return p
+
+
+def linked_body(doc, prefix, url, suffix="", first_line=True):
+    p = cited_body(doc, prefix, first_line=first_line)
+    add_hyperlink(p, url, url)
+    if suffix:
+        run = p.add_run(suffix)
         b.set_run_font(run, 12)
     return p
 
@@ -299,13 +340,14 @@ def front_matter(doc):
     logo.alignment = WD_ALIGN_PARAGRAPH.CENTER
     logo.add_run().add_picture(str(FIG_DIR / "Daffodil_International_University_logo.jpeg"), width=Inches(1.2))
     b.paragraph(doc, "DAFFODIL INTERNATIONAL UNIVERSITY\nDhaka, Bangladesh", align=WD_ALIGN_PARAGRAPH.CENTER, bold=True, size=15)
+    b.paragraph(doc, f"Submission and presentation date: {SUBMISSION_DATE}", align=WD_ALIGN_PARAGRAPH.CENTER, bold=True, size=11)
 
     front = doc.add_section(WD_SECTION.NEW_PAGE)
     b.set_page_geometry(front)
     b.set_section_page_numbering(front, 1, "lowerRoman")
     b.configure_footer(front, roman=True, visible=True)
     b.front_title(doc, "Approval")
-    cited_body(doc, f'This project titled “{BASE_TITLE},” submitted by {STUDENT_1} and {STUDENT_2} to the Department of Computer Science and Engineering, Daffodil International University, has been accepted as satisfactory for the partial fulfillment of the requirements for the degree of B.Sc. in Computer Science and Engineering and approved as to its style and contents. The presentation and submission information will be completed in the official copy.', first_line=False)
+    cited_body(doc, f'This project titled “{BASE_TITLE},” submitted by {STUDENT_1} and {STUDENT_2} to the Department of Computer Science and Engineering, Daffodil International University, has been accepted as satisfactory for the partial fulfillment of the requirements for the degree of B.Sc. in Computer Science and Engineering and approved as to its style and contents. The submission and presentation date is {SUBMISSION_DATE}.', first_line=False)
     b.paragraph(doc, "BOARD OF EXAMINERS", align=WD_ALIGN_PARAGRAPH.CENTER, bold=True, size=14)
     board = doc.add_table(rows=4, cols=2)
     board.style = "Table Grid"
@@ -344,7 +386,7 @@ def front_matter(doc):
     b.front_title(doc, "Acknowledgements")
     cited_body(doc, "We begin by expressing gratitude to the Almighty for the strength, patience, and opportunity required to complete this Final Year Design Project.")
     cited_body(doc, f"We are sincerely grateful to our supervisor, {SUPERVISOR}, {SUPERVISOR_DESIGNATION}, for his guidance in defining the research direction, reviewing the experimental plan, and strengthening the technical presentation. We also thank our co-supervisor, {CO_SUPERVISOR}, {CO_SUPERVISOR_DESIGNATION}, for constructive feedback throughout model development and report preparation.")
-    cited_body(doc, "We acknowledge the Department of Computer Science and Engineering at Daffodil International University for providing the academic environment for this work. We are grateful to the collaborating clinical source and the clinician who validated the study labels. Their official identifying details will be inserted in the approved institutional copy after administrative verification.")
+    cited_body(doc, f"We acknowledge the Department of Computer Science and Engineering at Daffodil International University for providing the academic environment for this work. We are grateful to the participating dental hospitals for supporting the clinical data collection and to {VALIDATING_CLINICIAN_PROSE} for validating the study labels.")
     cited_body(doc, "Finally, we thank our families, classmates, and well-wishers for their support during the year-long research process. Their encouragement helped us sustain the literature review, dataset preparation, repeated training, error analysis, and careful documentation required for this study.")
 
     doc.add_page_break()
@@ -409,7 +451,7 @@ def chapter_one(doc):
     ], widths=[2.5, 3.5], font_size=9)
 
     b.heading(doc, "1.5 Scope and Boundaries", 2)
-    cited_body(doc, "The study is retrospective and computational. It uses panoramic radiographs from [Hospital 1 name and location], [Hospital 2 name and location], and [Hospital 3 name and location], collected from [data collection start date] to [data collection end date]. These placeholders must be replaced with the approved provenance record. The 1,287 images represent 1,287 unique patients, and no patient contributes more than one radiograph to the analysed cohort.")
+    cited_body(doc, f"The study is retrospective and computational. It uses panoramic radiographs collected across 21 dental hospitals from {COLLECTION_PERIOD}. The hospitals are identified in Section 3.1. The 1,287 images represent 1,287 unique patients, and no patient contributes more than one radiograph to the analysed cohort.")
     cited_body(doc, "The primary endpoint is binary impacted-versus-non-impacted classification. Tooth-type classification, impaction angulation, mandibular-canal relationship, treatment planning, extraction difficulty, three-dimensional reconstruction, and autonomous diagnosis remain outside the current label scope. These clinically relevant extensions are studied elsewhere [14, 15, 17, 20, 23].")
     cited_body(doc, "The localisation component is an exploratory weak-supervision analysis. Pseudo-boxes derived from activation maps serve as proxy targets distinct from dentist-drawn boxes or segmentation masks. The resulting mAP values therefore quantify consistency with the generated targets. Studies with expert labels and public benchmarks provide the appropriate reference for the next stage of spatial validation [4, 9, 16, 18, 19, 22].")
 
@@ -465,8 +507,8 @@ def chapter_two(doc):
 def chapter_three(doc):
     b.chapter(doc, 3, "Research Methodology", "This chapter describes the study design, data provenance, cohort construction, preprocessing, model families, cross-validation, operating-point selection, calibration, statistical analysis, interpretability, weak localisation, ethics, and reproducibility controls.")
     b.heading(doc, "3.1 Study Design and Governance", 2)
-    cited_body(doc, "The study used a retrospective computational design based on a primary collection of panoramic dental radiographs. Data were obtained from [Hospital 1 name and location], [Hospital 2 name and location], and [Hospital 3 name and location] between [data collection start date] and [data collection end date]. Ethical permission was obtained from [ethics committee or institutional review board name], approval [approval/reference number], dated [approval date]. These bracketed fields must be completed from the signed institutional records before submission.")
-    cited_body(doc, "The dataset contains 1,287 radiographs from 1,287 unique patients, so each patient contributes one image. Image-level impacted/non-impacted labels were reviewed by [validating clinician name and qualification], a single doctor. This validation supports use of the binary labels; a multi-reader annotation phase is required to estimate inter-rater agreement. The confirmed reference standard comprises image-level labels, while spatial bounding boxes, segmentation masks, tooth-specific categories, and surgical outcomes are planned as separate evidence layers.")
+    cited_body(doc, f"The study used a retrospective computational design based on a primary collection of panoramic dental radiographs. Data were collected from {COLLECTION_PERIOD} across the following 21 hospitals: {HOSPITALS_TEXT}. Ethical permission was granted by the {ETHICS_COMMITTEE}, under reference {ETHICS_REFERENCE}.")
+    cited_body(doc, f"The dataset contains 1,287 radiographs from 1,287 unique patients, so each patient contributes one image. Image-level impacted/non-impacted labels were reviewed by {VALIDATING_CLINICIAN_PROSE}. This clinical review supports use of the binary labels; a multi-reader annotation phase would allow inter-rater agreement to be estimated. The confirmed reference standard comprises image-level labels, while spatial bounding boxes, segmentation masks, tooth-specific categories, and surgical outcomes are planned as separate evidence layers.")
     cited_body(doc, "Only de-identified radiographs and the minimum project labels required for analysis were used in the notebook. Access control, data storage, and export procedures should remain consistent with the institutional ethics approval. The public release should contain code and non-identifying derived summaries, not clinical images, unless the data-sharing permission explicitly authorizes release.")
     b.add_table(doc, "3.1", "Dataset and partition summary", ["Item", "Count", "Proportion/remark"], [
         ["Unique patients / images", "1,287 / 1,287", "One image per patient"],
@@ -556,8 +598,8 @@ def chapter_three(doc):
     cited_body(doc, "YOLOv8n was initialized from pretrained weights and trained for up to 40 epochs with 640-pixel inputs, batch size 16, and patience 10. The run stopped after 34 epochs, with the best result observed at epoch 24. Since the validation boxes were generated by the same pseudo-label process, the reported average precision measures pipeline self-consistency and should be interpreted separately from expert-box studies [4, 8, 9, 16, 18, 19, 22].")
 
     b.heading(doc, "3.10 Reproducibility, Ethics, and Availability", 2)
-    cited_body(doc, "Random seeds were fixed at the stages recorded in the notebook, fold assignments were stratified, and output artifacts included predictions, labels, gate-free metrics, geometry mappings, calibration summaries, error lists, and model checkpoints. The complete code will be made available at [GitHub repository URL]. This placeholder must be replaced with a working repository link and a release tag or commit before institutional submission.")
-    cited_body(doc, "The study was performed under institutional ethical permission. The final administrative record must include the approving committee, reference number, approval date, data-source hospitals, collection dates, and validating clinician. No direct project expense or external funding was received; personal devices, existing internet service, and free or institutionally available computing resources were used.")
+    linked_body(doc, "Random seeds were fixed at the stages recorded in the notebook, fold assignments were stratified, and output artifacts included predictions, labels, gate-free metrics, geometry mappings, calibration summaries, error lists, and model checkpoints. The designated repository address for the project code and reproducibility materials is ", CODE_REPOSITORY, ".")
+    cited_body(doc, f"The study was performed under permission from the {ETHICS_COMMITTEE}, reference {ETHICS_REFERENCE}. The primary radiographs were collected across the 21 named source hospitals from {COLLECTION_PERIOD}, and the image-level labels were validated by {VALIDATING_CLINICIAN_PROSE}. No direct project expense or external funding was received; personal devices, existing internet service, and free or institutionally available computing resources were used.")
     b.heading(doc, "3.11 Summary", 2)
     if DRAFT_MODE:
         cited_body(doc, "The methodology combines a unique-patient primary cohort, geometry-aware preparation, phased transfer learning, out-of-fold family selection, a single internally evaluated operating point, uncertainty intervals, qualitative activation review, and a separately scoped weak-localisation probe. Figure 3.2 additionally records the mask-supervised segmentation design, while Chapter 4 reports outputs from the executed classification and weak-localisation pipeline.")
@@ -741,7 +783,7 @@ def chapter_five(doc):
     ], widths=[1.5, 2.5, 2.1], font_size=8.5)
 
     b.heading(doc, "5.2 Ethical, Privacy, and Safety Considerations", 2)
-    cited_body(doc, "The radiographs are primary clinical data and were used under ethical permission. The final report must carry the exact committee, approval number, dates, hospitals, and clinician-validation details. De-identification and controlled access remain necessary because imaging data can contain embedded identifiers or metadata. Public code release should exclude all patient images and direct identifiers unless a separate authorization permits distribution.")
+    cited_body(doc, f"The radiographs are primary clinical data collected across the 21 named hospitals from {COLLECTION_PERIOD}. Their use was approved by the {ETHICS_COMMITTEE}, reference {ETHICS_REFERENCE}, and the image-level labels were validated by {VALIDATING_CLINICIAN_PROSE}. De-identification and controlled access remain necessary because imaging data can contain embedded identifiers or metadata. The public code release excludes patient images and direct identifiers unless separate authorization permits distribution.")
     if DRAFT_MODE:
         cited_body(doc, "The principal safety consideration is appropriate interpretation. With an internal AUROC of 0.9850, sensitivity of 0.9474, and four false negatives, the classifier is positioned as a clinician-supervised research prototype. Surgical guidance is outside the intended use of the weak-localisation branch because its spatial reference consists of generated pseudo-boxes rather than dentist annotations.")
     else:
@@ -794,7 +836,7 @@ def chapter_five(doc):
         cited_body(doc, "The project applied mathematics through probability, optimization, AUROC analysis, confusion-matrix measures, and Wilson intervals. Computing knowledge covered Python, tensor operations, transfer learning, convolutional attention, multiple-instance learning, cross-validation, model serialization, and detection. Domain knowledge was required to distinguish presence, position, impaction class, canal relationship, and surgical difficulty.")
     else:
         cited_body(doc, "The project applied mathematics through probability, optimization, AUROC analysis, calibration, bootstrap resampling, Wilson intervals, DeLong testing, and McNemar testing. Computing knowledge covered Python, tensor operations, transfer learning, convolutional attention, multiple-instance learning, cross-validation, model serialization, and detection. Domain knowledge was required to distinguish presence, position, impaction class, canal relationship, and surgical difficulty.")
-    cited_body(doc, "Research practice included systematic reading, citation routing, version control, evidence reconciliation, and interpretation against reporting guidance. Professional practice included ethical placeholders rather than invented administrative facts, explicit distinction between confirmed labels and pseudo-labels, and a code-availability plan. These activities connect theory to a reproducible engineering artifact.")
+    cited_body(doc, "Research practice included systematic reading, citation routing, version control, evidence reconciliation, and interpretation against reporting guidance. Professional practice included verified ethics and provenance records, an explicit distinction between confirmed labels and pseudo-labels, and a documented code repository. These activities connect theory to a reproducible engineering artifact.")
 
     b.heading(doc, "5.7 Design Challenges and Resolutions", 2)
     b.add_table(doc, "5.5", "Major design challenges", ["Challenge", "Implemented response", "Next evidence requirement"], [
@@ -845,7 +887,7 @@ def chapter_six(doc):
     else:
         cited_body(doc, "The classifier showed moderate discrimination, measurable residual calibration error, and performance that varied with threshold choice. Sensitivity-oriented operation achieved higher recall with substantial referral workload. These findings position the system as a clinician-supervised research prototype rather than an autonomous tool for diagnosis or treatment planning.")
     cited_body(doc, "The localisation pipeline used activation-derived pseudo-boxes, and detector performance was measured against those generated targets. Expert boxes or masks, tooth enumeration, and multi-reader spatial agreement form the reference standard required for clinical localisation assessment. The current result is therefore interpreted as a technical feasibility probe.")
-    cited_body(doc, "A single image per unique patient prevents repeated-patient overlap. Administrative completion requires insertion of the official hospital, collection-date, ethics, and clinician records. Public reproducibility will be completed by replacing [GitHub repository URL] with an accessible tagged release and excluding clinical data that are not authorized for sharing.")
+    linked_body(doc, f"A single image per unique patient prevents repeated-patient overlap. The provenance record identifies 21 source hospitals, the {COLLECTION_PERIOD} collection period, the approving committee and reference, and the validating clinician. The designated repository address is ", CODE_REPOSITORY, "; clinical data that are not authorized for sharing remain excluded.")
 
     b.heading(doc, "6.4 Future Work", 2)
     cited_body(doc, "The highest priority is an expert spatial annotation study. At least two dental specialists should independently draw boxes or masks, identify tooth type and impaction class, resolve disagreements, and report agreement. The mask-supervised U-Net workflow specified in Figure 3.2 provides the implementation path once these reference masks are available. A held-out external cohort should include different hospitals and devices. DENTEX provides a useful external benchmark and a model for hierarchical dentist-verified labels [22].")
@@ -883,27 +925,31 @@ def appendices_and_references(doc):
         ["Operating-point analysis", "Internal labels and final decisions", "Retrospective workload estimate"] if DRAFT_MODE else ["Triage simulation", "Internal labels and thresholds", "Retrospective workload estimate"],
     ], widths=[1.5, 2.2, 2.4], font_size=8.5)
     b.heading(doc, "A.3 Availability and Administrative Completion", 2)
-    cited_body(doc, "Code and reproducibility artifacts: [GitHub repository URL]. Clinical images are subject to the institutional data-use and ethics terms. Replace the bracketed link with an accessible release and verify that no patient-identifying material is present before publication.")
+    linked_body(doc, "The designated repository address for code and reproducibility artifacts is ", CODE_REPOSITORY, ". Clinical images remain subject to the institutional data-use and ethics terms and are not included in the repository.")
 
     doc.add_page_break()
     b.paragraph(doc, "Appendix B\nInstitutional Completion Checklist", style="Heading 1")
-    b.add_table(doc, "B.1", "Fields requiring official confirmation", ["Required item", "Current placeholder/status"], [
-        ["Submission/presentation date", "To be entered manually"],
+    admin_table = b.add_table(doc, "B.1", "Administrative and provenance record", ["Required item", "Recorded information"], [
+        ["Submission/presentation date", SUBMISSION_DATE],
         ["Board chairman and examiners", "Blank signature fields retained"],
         ["Department Head", "Blank field retained"],
-        ["Hospital names and locations", "[Hospital 1/2/3 name and location]"],
-        ["Collection period", "[data collection start date] to [data collection end date]"],
-        ["Ethics committee", "[ethics committee or institutional review board name]"],
-        ["Ethics approval", "[approval/reference number], [approval date]"],
-        ["Validating clinician", "[validating clinician name and qualification]"],
-        ["Code repository", "[GitHub repository URL]"],
+        ["Clinical sources", "21 hospitals listed in Section 3.1"],
+        ["Collection period", COLLECTION_PERIOD],
+        ["Ethics committee", ETHICS_COMMITTEE],
+        ["Ethics approval", ETHICS_REFERENCE],
+        ["Validating clinician", VALIDATING_CLINICIAN_RECORD],
+        ["Code repository", CODE_REPOSITORY],
     ], widths=[2.5, 3.6], font_size=9)
+    code_cell_p = admin_table.cell(9, 1).paragraphs[0]
+    for run in list(code_cell_p.runs):
+        code_cell_p._p.remove(run._r)
+    add_hyperlink(code_cell_p, CODE_REPOSITORY, CODE_REPOSITORY, size_half_points=18)
     b.heading(doc, "B.2 Verification Before Submission", 2)
     b.bullets(doc, [
-        "Replace every bracketed placeholder with the official signed record.",
+        "Enter the Board of Examiners and Department Head information when the official record is available.",
         "Confirm the author names and student IDs against the submission system.",
         "Confirm that all 1,287 image records correspond to unique patients in the institutional register.",
-        "Confirm that the clinician-validation statement matches the documented review procedure.",
+        "Confirm that the clinician-validation statement matches the signed review record.",
         "Open the repository link from a signed-out browser and verify the release contents.",
         "Remove clinical images, embedded identifiers, and private paths from public artifacts.",
         "Update the Table of Contents, List of Figures, List of Tables, and all page numbers in Microsoft Word.",
@@ -968,8 +1014,8 @@ def appendices_and_references(doc):
         ["Probability calibration", "Separate from count-derived evaluation", "External calibration and drift monitoring"] if DRAFT_MODE else ["Calibration", "ECE 0.1058 after scaling", "External calibration and drift monitoring"],
         ["Subgroup performance", "Pending metadata availability", "Demographic, device, site, and tooth-type analyses"],
         ["Workflow utility", "Retrospective simulation", "Reader or silent-deployment study"],
-        ["Data governance", "Permission reported; fields pending", "Completed ethics and provenance record"],
-        ["Software release", "Repository placeholder", "Tagged, documented, privacy-reviewed release"],
+        ["Data governance", "Ethics and source provenance recorded", "Maintain de-identification and controlled access"],
+        ["Software release", "Repository URL recorded", "Verify access and maintain a tagged, documented, privacy-reviewed release"],
     ], widths=[1.5, 1.8, 2.8], font_size=8.2)
     b.heading(doc, "E.2 Decision Boundary", 2)
     cited_body(doc, "At the current evidence stage, the software is appropriately described as a research prototype for retrospective analysis. Autonomous diagnosis, extraction recommendations, mandibular-canal risk estimation, and replacement of three-dimensional imaging remain outside its intended use. The proposed next evaluation is clinician-supervised and designed to measure decision support.")
