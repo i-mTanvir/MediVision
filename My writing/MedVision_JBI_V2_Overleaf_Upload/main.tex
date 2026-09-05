@@ -1014,7 +1014,7 @@ Adaptive-CADQ & 0.979 [0.952, 0.991] & 0.953 [0.910, 0.976] & 0.894 [0.774, 0.95
 
 \begin{figure}[pos=H]
 \centering
-\includegraphics[width=0.72\linewidth]{gradcam_baseline.png}
+\includegraphics[width=0.46\linewidth]{gradcam_baseline.png}
 \caption{Qualitative Grad-CAM examples for Baseline seed 42. The examples were
 not evaluated against localization annotations and do not support a causal or
 quantitative grounding claim.}
@@ -1022,10 +1022,12 @@ quantitative grounding claim.}
 \end{figure}
 
 % JBI uses numbered references in first-citation order.
+\clearpage
 \bibliographystyle{elsarticle-num}
-\renewcommand{\bibfont}{\fontsize{7pt}{8pt}\selectfont}
+\renewcommand{\bibfont}{\fontsize{6pt}{6.6pt}\selectfont}
 \begingroup
 \sloppy
+\setlength{\bibsep}{0pt}
 % Keep long web addresses from overflowing the single-column reference list.
 \renewcommand{\url}[1]{\href{#1}{\texttt{link}}}
 \bibliography{related_work_references,methodology_references}
